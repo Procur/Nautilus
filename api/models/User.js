@@ -20,7 +20,7 @@ module.exports = {
     },
 
     email: {
-      type: 'string',
+      type: 'email',
       required: true,
       unique: true
     },
