@@ -37,7 +37,7 @@ module.exports = {
   },
 
   index: function(req, res) {
-    console.log('test');
+
   },
 
   show: function(req, res) {
@@ -49,7 +49,21 @@ module.exports = {
   },
 
   deactivate: function(req, res) {
-
+    var p = req.params.all();
+    User.findOne({ id: p.id }, function(err, user){
+      errorHandler.serverError(err, res);
+      errorHandler.nullCollection(user, res);
+      if(user.active === false){
+        res.send(400, 'User is already inactive');
+      }
+      else {
+        User.update(user, { active: false }, function(err, user){
+          errorHandler.serverError(err, res);
+          errorHandler.nullCollection(user, res);
+          res.send(200, 'User account has been deactivated.');
+        });
+      }
+    });
   }
 
 };
