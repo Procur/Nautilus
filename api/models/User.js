@@ -71,7 +71,7 @@ module.exports = {
     *}
     */
 
-    company: {
+    /*company: {
       model: 'company'
     },
 
@@ -83,7 +83,7 @@ module.exports = {
       model: 'supplier'
     },
 
-    /*preference: {
+    preference: {
       collection: 'preference',
       via: 'users',
       dominant: true
