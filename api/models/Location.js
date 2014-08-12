@@ -8,7 +8,62 @@
 module.exports = {
 
   attributes: {
+    company: {
+      model: 'company'
+    },
 
+    buyer: {
+      model: 'buyer'
+    },
+
+    supplier: {
+      model: 'supplier'
+    },
+
+    name: {
+      type: 'string',
+      required: true
+    },
+
+    address: {
+      line1: {
+        type: 'string',
+        required: true
+      },
+
+      line2: {
+        type: 'string'
+      }
+    },
+
+    city: {
+      type: 'string',
+      required: true
+    },
+
+    province: {
+      type: 'string',
+      required: true
+    },
+
+    country: {
+      type: 'string',
+      required: true
+    },
+
+    postalCode: {
+      type: 'string',
+      required: true
+    },
+
+    isHq: {
+      type: 'boolean'
+    },
+
+    type: {
+      type: 'string',
+      required: true
+    }
   }
 };
 
