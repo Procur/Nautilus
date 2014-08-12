@@ -9,6 +9,21 @@ module.exports = {
 
   attributes: {
 
+    content: {
+      type: 'text'
+    },
+
+    note: {
+      type: 'text'
+    },
+
+    flag: {
+      type: 'array'
+    },
+
+    type: {
+      type: 'string'
+    }
   }
 };
 
