@@ -61,7 +61,7 @@ module.exports = {
       errorHandler.serverError(err, res);
       errorHandler.nullCollection(user, res);
       User.update(user, {
-        //THINGS HAPPEN HERE @TODO finish building this
+        //THINGS HAPPEN HERE TODO finish building this
       });
     });
   },

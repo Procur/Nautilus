@@ -7,6 +7,7 @@
 
 module.exports = {
 
+  adapter: 'api',
   attributes: {
     user: {
       model: 'user'
