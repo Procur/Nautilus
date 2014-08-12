@@ -8,11 +8,13 @@
 module.exports = {
 
   create: function(req, res) {
+    //var p = req.params;
 
+    console.log('test');
   },
 
   index: function(req, res) {
-
+    console.log('test');
   },
 
   show: function(req, res) {
@@ -28,4 +30,3 @@ module.exports = {
   }
 
 };
-
