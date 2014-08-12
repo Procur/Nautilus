@@ -8,7 +8,9 @@
 module.exports = {
 
   heartbeat: function(req, res) {
-    res.send(200, 'Procur API v1')
+
+    var payload = "Procur API v1: Documentation: [doc address]";
+    res.send(200, payload);
   }
 
 };
