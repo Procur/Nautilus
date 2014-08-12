@@ -22,7 +22,7 @@ module.exports = {
     },
 
     preferredBuyer: {
-      type: {
+      buyerType: {
         type: 'string',
         required: true
       },
@@ -38,7 +38,7 @@ module.exports = {
       }
     },
 
-    type: {
+    supplierType: {
       type: 'string'
     },
 

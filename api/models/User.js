@@ -84,13 +84,13 @@ module.exports = {
 
     preference: {
       collection: 'preference',
-      via: 'users',
+      via: 'user',
       dominant: true
     },
 
     notification: {
       collection: 'notification',
-      via: 'users',
+      via: 'user',
       dominant: true
     },
 
