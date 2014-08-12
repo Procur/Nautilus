@@ -8,9 +8,21 @@
 module.exports = {
 
   attributes: {
-    /*owner: {
+    company: {
+      model: 'company'
+    },
+
+    buyer: {
+      model: 'buyer'
+    },
+
+    supplier: {
+      model: 'supplier'
+    },
+
+    user: {
       model: 'user'
-    },*/
+    },
 
     title: {
       type: 'string'

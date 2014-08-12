@@ -152,16 +152,17 @@ module.exports = {
     },
 
     locations: {
-      model: 'location'
+      collection: 'location',
+      via: 'buyer'
     },
 
     active: {
       type: 'boolean'
-    },
-
-    rfx: {
-      model: 'rfx'
     }
+
+    /*rfx: {
+      model: 'rfx'
+    }*/
   }
 };
 

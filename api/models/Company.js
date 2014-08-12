@@ -90,6 +90,16 @@ module.exports = {
 
     //ASSOCIATIONS HERE//
 
+    locations: {
+      collection: 'location',
+      via: 'company'
+    },
+
+    assets: {
+      collection: 'asset',
+      via: 'company'
+    },
+
     logo: {
       type: 'string'
     }

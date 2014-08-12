@@ -65,13 +65,12 @@ module.exports = {
       required: true
     },
 
-    /** defaultMode: {
-    *  type: 'string',
-    *  required: true
-    *}
-    */
+    defaultMode: {
+      type: 'string',
+      required: true
+    },
 
-    /*company: {
+    company: {
       model: 'company'
     },
 
@@ -93,7 +92,7 @@ module.exports = {
       collection: 'notification',
       via: 'users',
       dominant: true
-    },*/
+    },
 
     globalAdmin: {
       type: 'boolean'
