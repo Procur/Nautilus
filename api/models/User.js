@@ -83,7 +83,7 @@ module.exports = {
       model: 'supplier'
     },
 
-    preference: {
+    /*preference: {
       collection: 'preference',
       via: 'users',
       dominant: true
@@ -93,11 +93,10 @@ module.exports = {
       collection: 'notification',
       via: 'users',
       dominant: true
-    },
+    },*/
 
     globalAdmin: {
       type: 'boolean'
     }
   }
 };
-
