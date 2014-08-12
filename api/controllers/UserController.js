@@ -37,7 +37,11 @@ module.exports = {
   },
 
   index: function(req, res) {
-
+    User.find().exec(function(err, users){
+      errorHandler.serverError(err, res);
+      errorHandler.nullCollection(users, res);
+      res.json(users);
+    });
   },
 
   show: function(req, res) {
@@ -45,13 +49,21 @@ module.exports = {
 
     User.findOne({ id: p.id }, function(err, user){
       errorHandler.serverError(err, res);
-      errorHandler.nullCollection(user, res)
+      errorHandler.nullCollection(user, res);
       res.json(200, user);
     });
   },
 
   modify: function(req, res) {
+    var p = req.params.all();
 
+    User.findOne({ id: p.id }, function(err, user){
+      errorHandler.serverError(err, res);
+      errorHandler.nullCollection(user, res);
+      User.update(user, {
+        //THINGS HAPPEN HERE @TODO finish building this
+      });
+    });
   },
 
   deactivate: function(req, res) {
