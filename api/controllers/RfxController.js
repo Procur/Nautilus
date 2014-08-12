@@ -6,6 +6,21 @@
  */
 
 module.exports = {
-	
+
+  create: function(req, res) {
+
+  },
+
+  show: function(req, res) {
+
+  },
+
+  modify: function(req, res) {
+
+  },
+
+  destroy: function(req, res) {
+
+  }
 };
 
