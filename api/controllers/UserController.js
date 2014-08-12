@@ -41,7 +41,13 @@ module.exports = {
   },
 
   show: function(req, res) {
+    var p = req.params.all();
 
+    User.findOne({ id: p.id }, function(err, user){
+      errorHandler.serverError(err, res);
+      errorHandler.nullCollection(user, res)
+      res.json(200, user);
+    });
   },
 
   modify: function(req, res) {
