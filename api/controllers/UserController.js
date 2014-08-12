@@ -12,7 +12,7 @@ module.exports = {
 
     User.findOne({ email: p.email }, function(err, user) {
       errorHandler.serverError(err, res);
-      if(user === undefined) {
+      if(user !== undefined) {
         res.send(400, 'The specified email address is currently in use.');
       }
       else {
@@ -23,8 +23,9 @@ module.exports = {
             email: p.email,
             password: hash
           }, function(err, user){
-            errorhandler.serverError(err, res);
-            res.json(201, user);
+            errorHandler.serverError(err, res);
+            //res.status(201)
+            res.json(user);
           });
         });
       }
