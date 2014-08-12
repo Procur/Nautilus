@@ -82,6 +82,45 @@ module.exports = {
         });
       }
     });
-  }
+  },
 
+  setGlobalAdmin: function(req, res) {
+    var p = req.params.all();
+
+    User.findOne({ id: p.id }, function(err, user) {
+      errorHandler.serverError(err, res);
+      errorHandler.nullCollection(user, res);
+      if(user.globalAdministrator === true){
+        res.send(400, 'User is already a global administrator.')
+      }
+      else {
+        User.update(user, { globalAdministrator: true }, function(err, user) {
+          errorHandler.serverError(err, res);
+          errorHandler.nullCollection(user, res);
+          res.status(200);
+          res.json(user);
+        });
+      }
+    });
+  },
+
+  revokeGlobalAdmin: function(req, res) {
+    var p = req.params.all();
+
+    User.findOne({ id: p.id }, function(err, user) {
+      errorHandler.serverError(err, res);
+      errorHandler.nullCollection(user, res);
+      if(user.globalAdministrator === false){
+        res.send(400, 'User already lacks global administrator privileges.')
+      }
+      else {
+        User.update(user, { globalAdministrator: false }, function(err, user) {
+          errorHandler.serverError(err, res);
+          errorHandler.nullCollection(user, res);
+          res.status(200);
+          res.json(user);
+        });
+      }
+    });
+  }
 };
