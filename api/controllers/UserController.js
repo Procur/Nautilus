@@ -21,10 +21,14 @@ module.exports = {
             firstName: p.firstName,
             lastName: p.lastName,
             email: p.email,
-            password: hash
+            password: hash,
+            activeMode: 'signup',
+            active: true,
+            companyAdmin: false,
+            defaultMode: 'signup'
           }, function(err, user){
             errorHandler.serverError(err, res);
-            //res.status(201)
+            res.status(201);
             res.json(user);
           });
         });
