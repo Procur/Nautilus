@@ -84,7 +84,7 @@ module.exports = {
     });
   },
 
-  setGlobalAdmin: function(req, res) {
+  grantGlobalAdmin: function(req, res) {
     var p = req.params.all();
 
     User.findOne({ id: p.id }, function(err, user) {
