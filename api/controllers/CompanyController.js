@@ -16,7 +16,16 @@ module.exports = {
   },
 
   show: function(req, res) {
-
+    var p = req.params.all();
+    Company.findOne()
+      .where({ id: p.id })
+      .then(function(company){
+          errorHandler.nullCollection(company, res);
+          res.status(200);
+          res.json(company);
+        }).fail(function(err){
+          errorHandler.serverError(err, res);
+        });
   },
 
   modify: function(req, res) {
