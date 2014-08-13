@@ -30,8 +30,19 @@ module.exports = {
 
   },
 
-  destroy: function(req, res) {
+  deactivate: function(req, res) {
+    var p = req.params.all();
 
+    Asset.findOne({ id: p.id }, function(err, asset) {
+      errorHandler.serverError(err, res);
+      errorHandler.nullCollection(asset, res);
+      Asset.update(asset, { active: false, visible: false }, function(err, asset) {
+        errorHandler.serverError(err, res);
+        errorHandler.nullCollection(asset, res);
+        res.status(200);
+        res.json(asset);
+      });
+    });
   }
 };
 
