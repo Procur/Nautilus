@@ -21,7 +21,7 @@ module.exports = {
   },
 
   qc: function(err, res, collection) {
-    collection = collection | undefined;
+    collection = collection || undefined;
     if (err !== undefined) {
       Log.create({ content: err }, function (err, log) {
         if (log !== undefined) {
