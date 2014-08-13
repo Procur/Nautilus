@@ -57,12 +57,9 @@ module.exports = {
   modify: function(req, res) {
     var p = req.params.all();
 
-    User.findOne({ id: p.id }, function(err, user){
-      errorHandler.serverError(err, res);
-      errorHandler.nullCollection(user, res);
-      User.update(user, {
-        //THINGS HAPPEN HERE TODO finish building this
-      });
+    User.update({ id: p.id }, p, function(err, user){
+      errorHandler.qc(err, res, user);
+      res.json(200, user);
     });
   },
 
