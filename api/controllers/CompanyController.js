@@ -47,7 +47,15 @@ module.exports = {
   },
 
   modify: function(req, res) {
+    var p = req.params.all();
 
+    Company.findOne({ id: p.id }, function(err, company) {
+      errorHandler.qc(err, res, company);
+      Company.update(company, p, function(err, company){
+        errorHandler.qc(err, res, company);
+        res.json(200, company);
+      });
+    });
   },
 
   deactivate: function(req, res) {
