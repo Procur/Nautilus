@@ -2,6 +2,7 @@
 module.exports = {
 
   adapter: 'api',
+  schema: true,
   attributes: {
 
     company: {
