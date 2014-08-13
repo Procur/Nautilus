@@ -16,14 +16,7 @@ module.exports = {
   },
 
   show: function(req, res) {
-    var p = req.params.all();
-
-    Asset.findOne({ id: p.id }, function(err, asset) {
-      errorHandler.serverError(err, res);
-      errorHandler.nullCollection(asset, res);
-      res.status(200);
-      res.json(asset);
-    });
+    
   },
 
   modify: function(req, res) {
