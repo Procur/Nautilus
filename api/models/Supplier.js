@@ -154,9 +154,19 @@ module.exports = {
       type: 'boolean'
     },
 
+    productCategory: {
+      collection: 'productCategory',
+      via:'supplier',
+      dominant: true
+    },
+
+    product: {
+      collection: 'product',
+      via:'supplier',
+    },
+
     rfx: {
       model: 'rfx'
     }
   }
 };
-

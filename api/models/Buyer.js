@@ -156,6 +156,12 @@ module.exports = {
       via: 'buyer'
     },
 
+    productCategory: {
+      collection: 'productCategory',
+      via:'buyer',
+      dominant: true
+    },
+
     active: {
       type: 'boolean'
     }
@@ -165,4 +171,3 @@ module.exports = {
     }*/
   }
 };
-
