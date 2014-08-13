@@ -28,12 +28,43 @@ module.exports = {
         });
   },
 
+  test: function(req, res) {
+    Company.findOne({ id: p.id }, function(err, company){
+      errorHandler.qc(err, res, company);
+      res.json(company);
+    });
+  },
+
   modify: function(req, res) {
 
   },
 
   deactivate: function(req, res) {
+    var p = req.params.all();
 
+    Company.findOne({ id: p.id }, function(err, company) {
+      errorHandler.qc(err, res, company);
+      Company.update(company, { active: false }, function(err, company) {
+        errorHandler.qc(err, res, company);
+        res.json(200, company);
+      });
+    });
+  },
+
+  deac: function(req, res) {
+    var p = req.params.all();
+
+    Company.findOne()
+        .where({ id: p.id })
+        .then(function(company){
+          errorHandler.nullCollection(company, res);
+          Company.update(company, { active: false })
+              .then(function(company){
+                res.json(200, company);
+              });
+        }).fail(function(err){
+          errorHandler.serverError(err, res);
+        });
   }
 };
 

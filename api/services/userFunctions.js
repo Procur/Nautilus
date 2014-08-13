@@ -18,5 +18,12 @@ module.exports = {
       errorHandler.nullCollection(user, res);
       callback(user);
     });
+  },
+
+  findbyemail2: function(email) {
+    User.findOne({ email: email }, function(err, user) {
+      errorHandler.qc(err, res, user);
+      return(user);
+    })
   }
 };
