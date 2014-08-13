@@ -16,7 +16,7 @@ module.exports = {
   },
 
   show: function(req, res) {
-    
+
   },
 
   modify: function(req, res) {
