@@ -65,7 +65,7 @@ function show(req, res) {
 function modify(req, res) {
   var p = req.params.all();
 
-  async.waterfall([ fetchCompany(), modifyCompany()], sendResponse());
+  async.waterfall([ fetchCompany, modifyCompany], sendResponse);
 
   function fetchCompany(callback) {
     Company.findOne({ id: p.id }, function(err, company) {
@@ -91,7 +91,7 @@ function deactivate(req, res) {
 
   var p = req.params.all();
 
-  async.waterfall([ fetchAsset(), deactivateAsset()], sendResponse());
+  async.waterfall([ fetchCompany, deactivateCompany], sendResponse);
 
   function fetchCompany(callback) {
     Company.findOne({ id: p.id }, function(err, company){
@@ -99,8 +99,8 @@ function deactivate(req, res) {
     });
   }
 
-  function deactivateAsset(company, callback) {
-    Company.update(asset, { active: false, visible: false }, function(err, company) {
+  function deactivateCompany(company, callback) {
+    Company.update(company, { active: false, visible: false }, function(err, company) {
       callback(err, company);
     });
   }
