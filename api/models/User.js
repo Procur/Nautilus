@@ -9,7 +9,18 @@ module.exports = {
 
   adapter: 'api',
   schema: true,
-  attributes: {
+  attributes: attributes(),
+
+  // Custom class methods
+  deactivate: paranoidDeactivate,
+
+  // Lifecycle callbacks
+  beforeCreate: hashPassword
+    
+};
+
+function attributes() {
+  return {
 
     firstName: {
       type: 'string',
@@ -45,9 +56,8 @@ module.exports = {
       required: true
     },
 
-    active: {
-      type: 'boolean',
-      required: true
+    deletedAt: {
+      type: 'datetime'
     },
 
     image: {
@@ -99,5 +109,26 @@ module.exports = {
     globalAdmin: {
       type: 'boolean'
     }
-  }
-};
+  };
+}
+
+function paranoidDeactivate(user, cb) {
+  console.log(user);
+  var now = new Date();
+  User
+    .update(user, { deletedAt: now })
+    .exec(function(err, user) { console.log(err); console.log(user); cb(null, user); });
+}
+
+function hashPassword(values, cb) {
+  var bcrypt = require('bcrypt');
+  var salt = 10;
+
+  bcrypt
+    .hash(values.password, salt, function(err, hash) {
+      if (err) return cb(err);
+      
+      values.password = hash;
+      cb();
+    });
+}
