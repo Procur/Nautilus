@@ -7,26 +7,67 @@
 
 module.exports = {
 
-  create: function(req, res) {
-    var p = req.params.all();
+  index: index,
+  create: create,
+  show: show,
+  modify: modify,
+  deactivate: deactivate
 
-    User.findOne({ email: p.email }, function(err, user) {
+};
+
+function create(req, res) {
+  var p = req.params.all();
+
+  async.waterfall([ checkUserInUse, createUser ], sendResponse);
+
+  function checkUserInUse(callback) {
+    User
+      .findOne({ email: p.email })
+      .exec(function(err, user) {
+        if (user) { throw "Email bad"; }
+        
+        AuthService.hashPassword(p.password, function(err, hash) { 
+          p.password = hash;
+          callback(err, user);
+        });
+      });
+  }
+
+  function createUser(user, callback) {
+    User
+      .create(p)
+      .exec(function(err, user) { callback(user); });
+  }
+
+  function sendResponse(err, user) {
+    ErrorHandler.serverError(err, res);
+    if (err) { res.send(400, 'The specified email address is currently in use.'); }
+
+    res.status(201).json(user);
+  }
+}
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+create: function() {
+      User.findOne({ email: p.email }, function(err, user) {
       errorHandler.serverError(err, res);
       if(user !== undefined) {
         res.send(400, 'The specified email address is currently in use.');
       }
       else {
         authFunctions.hashPassword(p.password, function(err, hash){
-          User.create({
-            firstName: p.firstName,
-            lastName: p.lastName,
-            email: p.email,
-            password: hash,
-            activeMode: 'signup',
-            active: true,
-            companyAdmin: false,
-            defaultMode: 'signup'
-          }, function(err, user){
+          User.create(p, function(err, user){
             errorHandler.serverError(err, res);
             res.status(201);
             res.json(user);
