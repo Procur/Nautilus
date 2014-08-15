@@ -7,7 +7,15 @@
 
 module.exports = {
 
-  create: function(req, res) {
+  create: create,
+  index: index,
+  show: show,
+  modify: modify,
+  deactivate: deactivate
+
+}
+
+  /* create: function(req, res) {
     var p = req.params.all();
 
     User.findOne({ email: p.email }, function(err, user) {
@@ -26,7 +34,7 @@ module.exports = {
             active: true,
             companyAdmin: false,
             defaultMode: 'signup'
-          }, function(err, user){
+          }, function(err, user):
             errorHandler.serverError(err, res);
             res.status(201);
             res.json(user);
@@ -120,4 +128,4 @@ module.exports = {
       }
     });
   }
-};
+}; */

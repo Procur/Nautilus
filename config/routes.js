@@ -4,7 +4,5 @@ module.exports.routes = {
 
   'post /signup': 'UserController.create',
 
-  'get /users': 'UserController.index',
-
-  'get /tokentest': 'ApiTokenController.index'
+  'get /users': 'UserController.index'
 };
