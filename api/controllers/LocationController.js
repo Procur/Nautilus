@@ -46,7 +46,7 @@ function show(req, res) {
 function modify(req, res) {
   var p = req.params.all();
 
-  async.waterfall([ fetchLocation(), modifyLocation()], sendResponse());
+  async.waterfall([ fetchLocation, modifyLocation], sendResponse);
 
   function fetchLocation(callback) {
     Location.findOne({ id: p.id }, function(err, location) {
@@ -69,7 +69,7 @@ function modify(req, res) {
 function deactivate(req, res) {
   var p = req.params.all();
 
-  async.waterfall([ fetchLocation(), deactivateLocation()], sendResponse());
+  async.waterfall([ fetchLocation, deactivateLocation], sendResponse);
 
   function fetchLocation(callback) {
     Location.findOne({ id: p.id }, function(err, location) {
