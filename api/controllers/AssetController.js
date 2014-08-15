@@ -66,7 +66,7 @@ function deactivate(req, res) {
 
   var p = req.params.all();
 
-  async.waterfall([ fetchAsset(), deactivateAsset()], sendResponse());
+  async.waterfall([ fetchAsset, deactivateAsset], sendResponse);
 
   function fetchAsset(callback) {
     Asset.findOne({ id: p.id }, function(err, asset){
