@@ -13,6 +13,8 @@ module.exports = {
   deactivate: deactivate
 };
 
+////////////////////////////////////////
+
 function create(req, res) {
   var p = req.params.all();
 
@@ -21,6 +23,8 @@ function create(req, res) {
     res.json(201, asset);
   });
 }
+
+////////////////////////////////////////
 
 function index(req, res) {
   Asset.find()
@@ -31,6 +35,8 @@ function index(req, res) {
         errorHandler.serverError(err, res);
       });
 }
+
+////////////////////////////////////////
 
 function show(req, res) {
   var p = req.params.all();
@@ -43,6 +49,8 @@ function show(req, res) {
   });
 }
 
+////////////////////////////////////////
+
 function modify(req, res) {
   var p = req.params.all();
 
@@ -52,8 +60,10 @@ function modify(req, res) {
   });
 }
 
+////////////////////////////////////////
+
 function deactivate(req, res) {
-  
+
   var p = req.params.all();
 
   async.waterfall([ fetchAsset(), deactivateAsset()], sendResponse());
