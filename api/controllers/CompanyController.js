@@ -35,6 +35,18 @@ function create(req, res) {
 
 ////////////////////////////////////////
 
+function index(req, res) {
+  Company.find()
+      .then(function(companies) {
+        errorHandler.nullCollection(companies, res);
+        res.json(200, companies);
+      }).fail(function(err) {
+        errorHandler.serverError(err, res);
+      });
+}
+
+////////////////////////////////////////
+
 function show(req, res) {
   var p = req.params.all();
   Company.findOne()
