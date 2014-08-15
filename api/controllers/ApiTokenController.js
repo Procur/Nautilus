@@ -7,8 +7,24 @@
 
 module.exports = {
 
-  create: function(req, res) {
-
-  }
+  create: create,
+  index: index,
+  show: show,
+  destroy: destroy
 };
 
+function create(req, res) {
+
+}
+
+function index(req, res) {
+
+}
+
+function show(req, res) {
+
+}
+
+function destroy(req, res) {
+
+}

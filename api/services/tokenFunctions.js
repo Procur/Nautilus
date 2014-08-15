@@ -8,9 +8,5 @@ module.exports = {
 
 function generateToken(callback) {
   var token = uuid.v1();
-
-  ApiToken.findOne({ token: token }, function(err, token) {
-    errorHandler.serverError(err, res);
-    callback(token);
-  });
+  callback(token);
 }
