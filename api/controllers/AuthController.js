@@ -7,12 +7,15 @@
 
 module.exports = {
 
-  login: function(req, res) {
+  login: login,
+  logout: logout
 
-  },
-
-  logout: function(req, res) {
-
-  }
 };
 
+function login(req, res) {
+  var p = req.params.all();
+}
+
+function logout(req, res) {
+  var p = req.params.all();
+}
