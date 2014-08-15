@@ -7,67 +7,94 @@
 
 module.exports = {
 
-  create: function(req, res) {
-    var p = req.params.all();
+  create: create,
+  index: index,
+  show: show,
+  modify: modify,
+  deactivate: deactivate
 
-    userFunctions.findByApiToken(p.apitoken, function(user){
-      if(user.company !== undefined) {
-        Company.create(p, function(err, company) {
-          errorHandler.qc(err, res, company);
-          res.json(201, company);
-        });
-      }
-      else {
-        res.send(400, 'This user already belongs to a company.');
-      }
-    });
-  },
-
-  index: function(req, res) {
-    Company.find()
-        .then(function(companies) {
-          errorHandler.nullCollection(companies, res);
-          res.json(200, companies);
-        }).fail(function(err) {
-          errorHandler.serverError(err, res);
-        });
-  },
-
-  show: function(req, res) {
-    var p = req.params.all();
-    Company.findOne()
-        .where({ id: p.id })
-        .then(function(company){
-          errorHandler.nullCollection(company, res);
-          res.status(200);
-          res.json(company);
-        }).fail(function(err){
-          errorHandler.serverError(err, res);
-        });
-  },
-
-  modify: function(req, res) {
-    var p = req.params.all();
-
-    Company.findOne({ id: p.id }, function(err, company) {
-      errorHandler.qc(err, res, company);
-      Company.update(company, p, function(err, company){
-        errorHandler.qc(err, res, company);
-        res.json(200, company);
-      });
-    });
-  },
-
-  deactivate: function(req, res) {
-    var p = req.params.all();
-
-    Company.findOne({ id: p.id }, function(err, company) {
-      errorHandler.qc(err, res, company);
-      Company.update(company, { active: false }, function(err, company) {
-        errorHandler.qc(err, res, company);
-        res.json(200, company);
-      });
-    });
-  }
 };
 
+////////////////////////////////////////
+
+function create(req, res) {
+  var p = req.params.all();
+
+  userFunctions.findByApiToken(p.apitoken, function(user){
+    if(user.company !== undefined) {
+      Company.create(p, function(err, company) {
+        errorHandler.qc(err, res, company);
+        res.json(201, company);
+      });
+    }
+    else {
+      res.send(400, 'This user already belongs to a company.');
+    }
+  });
+}
+
+////////////////////////////////////////
+
+function show(req, res) {
+  var p = req.params.all();
+  Company.findOne()
+      .where({ id: p.id })
+      .then(function(company){
+        errorHandler.nullCollection(company, res);
+        res.status(200);
+        res.json(company);
+      }).fail(function(err){
+        errorHandler.serverError(err, res);
+      });
+}
+
+////////////////////////////////////////
+
+function modify(req, res) {
+  var p = req.params.all();
+
+  async.waterfall([ fetchCompany(), modifyCompany()], sendResponse());
+
+  function fetchCompany(callback) {
+    Company.findOne({ id: p.id }, function(err, company) {
+      callback(company);
+    });
+  }
+
+  function modifyCompany(company, callback) {
+    Company.update(company, p, function(err, company) {
+      callback(company);
+    });
+  }
+
+  function sendResponse(err, company) {
+    errorHandler.qc(err, res, company);
+    res.json(200, company);
+  }
+}
+
+////////////////////////////////////////
+
+function deactivate(req, res) {
+
+  var p = req.params.all();
+
+  async.waterfall([ fetchAsset(), deactivateAsset()], sendResponse());
+
+  function fetchCompany(callback) {
+    Company.findOne({ id: p.id }, function(err, company){
+      callback(err, company);
+    });
+  }
+
+  function deactivateAsset(company, callback) {
+    Company.update(asset, { active: false, visible: false }, function(err, company) {
+      callback(err, company);
+    });
+  }
+
+  function sendResponse(err, company) {
+    errorHandler.qc(err, res, company);
+    res.json(200, company);
+  }
+}
