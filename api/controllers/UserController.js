@@ -15,150 +15,96 @@ module.exports = {
 
 };
 
+function index(req, res) {
+  User
+    .find()
+    .exec(function(err, users) {
+      errorHandler.qc(err, res, user);
+      
+      res.status(200).json(users);
+    });
+}
+
 function create(req, res) {
   var p = req.params.all();
 
-  async.waterfall([ checkUserInUse, createUser ], sendResponse);
+  async.waterfall([ rejectIfUserExists, createUser ], sendResponse);
 
-  function checkUserInUse(callback) {
+  function rejectIfUserExists(cb) {
     User
       .findOne({ email: p.email })
       .exec(function(err, user) {
-        if (user) { throw "Email bad"; }
+        if (user) { cb('EmailExistsError', user); }
         
-        AuthService.hashPassword(p.password, function(err, hash) { 
-          p.password = hash;
-          callback(err, user);
-        });
+        cb(err, user);
       });
   }
 
-  function createUser(user, callback) {
+  function createUser(user, cb) {
     User
       .create(p)
-      .exec(function(err, user) { callback(user); });
+      .exec(function(err, user) { cb(err, user); });
   }
 
   function sendResponse(err, user) {
-    ErrorHandler.serverError(err, res);
-    if (err) { res.send(400, 'The specified email address is currently in use.'); }
+    errorHandler.qc(err, res, user);
+    if (err === 'EmailExistsError') { 
+      var message = 'The specified email address is currently in use.';
+      return res.status(400).json(errorHandler.buildError(err, message));
+    }
 
     res.status(201).json(user);
   }
 }
 
+function show(req, res) {
+  var p = req.params.all();
 
-  
-  
-
-
-
-
-
-
-
-
-
-create: function() {
-      User.findOne({ email: p.email }, function(err, user) {
-      errorHandler.serverError(err, res);
-      if(user !== undefined) {
-        res.send(400, 'The specified email address is currently in use.');
-      }
-      else {
-        authFunctions.hashPassword(p.password, function(err, hash){
-          User.create(p, function(err, user){
-            errorHandler.serverError(err, res);
-            res.status(201);
-            res.json(user);
-          });
-        });
-      }
-    });
-  },
-
-  index: function(req, res) {
-    User.find().exec(function(err, users){
-      errorHandler.serverError(err, res);
-      errorHandler.nullCollection(users, res);
-      res.json(users);
-    });
-  },
-
-  show: function(req, res) {
-    var p = req.params.all();
-
-    User.findOne({ id: p.id }, function(err, user){
-      errorHandler.serverError(err, res);
-      errorHandler.nullCollection(user, res);
-      res.json(200, user);
-    });
-  },
-
-  modify: function(req, res) {
-    var p = req.params.all();
-
-    User.update({ id: p.id }, p, function(err, user){
+  User
+    .findOne({ id: p.id })
+    .exec(function(err, user) {
       errorHandler.qc(err, res, user);
-      res.json(200, user);
+
+      res.status(200).json(user);
     });
-  },
+}
 
-  deactivate: function(req, res) {
-    var p = req.params.all();
-    User.findOne({ id: p.id }, function(err, user){
-      errorHandler.serverError(err, res);
-      errorHandler.nullCollection(user, res);
-      if(user.active === false){
-        res.send(400, 'User is already inactive');
-      }
-      else {
-        User.update(user, { active: false }, function(err, user){
-          errorHandler.serverError(err, res);
-          errorHandler.nullCollection(user, res);
-          res.send(200, 'User account has been deactivated.');
-        });
-      }
+function modify(req, res) {
+  var p = req.params.all();
+
+  User
+    .update({ id: p.id }, p)
+    .exec(function(err, user) {
+      errorHandler.qc(err, res, user);
+
+      res.status(200).json(user);
     });
-  },
+}
 
-  grantGlobalAdmin: function(req, res) {
-    var p = req.params.all();
+function deactivate(req, res) {
+  var p = req.params.all();
 
-    User.findOne({ id: p.id }, function(err, user) {
-      errorHandler.serverError(err, res);
-      errorHandler.nullCollection(user, res);
-      if(user.globalAdministrator === true){
-        res.send(400, 'User is already a global administrator.')
-      }
-      else {
-        User.update(user, { globalAdministrator: true }, function(err, user) {
-          errorHandler.serverError(err, res);
-          errorHandler.nullCollection(user, res);
-          res.status(200);
-          res.json(user);
-        });
-      }
-    });
-  },
+  async.waterfall([ rejectIfUserDeactivated, deactivateUser ], sendResponse);
 
-  revokeGlobalAdmin: function(req, res) {
-    var p = req.params.all();
+  function rejectIfUserDeactivated(cb) {
+    User
+      .findOne({ id: p.id })
+      .exec(function(err, user) {
+        if (user.deletedAt) { cb('UserDeactivatedError', user); }
 
-    User.findOne({ id: p.id }, function(err, user) {
-      errorHandler.serverError(err, res);
-      errorHandler.nullCollection(user, res);
-      if(user.globalAdministrator === false){
-        res.send(400, 'User already lacks global administrator privileges.')
-      }
-      else {
-        User.update(user, { globalAdministrator: false }, function(err, user) {
-          errorHandler.serverError(err, res);
-          errorHandler.nullCollection(user, res);
-          res.status(200);
-          res.json(user);
-        });
-      }
-    });
+        cb(err, user);
+      });
   }
-};
+
+  function deactivateUser(user, cb) {
+    User
+      .deactivate(user.id)
+      .exec(function(err, user) { cb(err, user); });
+  }
+
+  function sendResponse(err, user) {
+    errorHandler.qc(err, res, user);
+
+    res.status(200).json(user);
+  }
+}
