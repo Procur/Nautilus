@@ -13,7 +13,7 @@ module.exports = {
   modify: modify,
   deactivate: deactivate
 
-}
+};
 
   /* create: function(req, res) {
     var p = req.params.all();
