@@ -6,35 +6,27 @@
  */
 
 module.exports = {
-
   index: index,
   create: create,
   show: show,
   modify: modify,
   deactivate: deactivate
-
 };
 
 function index(req, res) {
-  User
-    .find()
-    .exec(function(err, users) {
-      errorHandler.qc(err, res, user);
-      
-      res.status(200).json(users);
-    });
+  User.find().exec(sendResponse(res));
 }
 
 function create(req, res) {
   var p = req.params.all();
 
-  async.waterfall([ rejectIfUserExists, createUser ], sendResponse);
+  async.waterfall([ rejectIfUserExists, createUser ], sendResponse(res, 201));
 
   function rejectIfUserExists(cb) {
     User
       .findOne({ email: p.email })
       .exec(function(err, user) {
-        if (user) { cb('EmailExistsError', user); }
+        if (user) { cb('EmailAlreadyExistsError', user); }
         
         cb(err, user);
       });
@@ -42,69 +34,51 @@ function create(req, res) {
 
   function createUser(user, cb) {
     User
-      .create(p)
+      .create(req.params.all())
       .exec(function(err, user) { cb(err, user); });
-  }
-
-  function sendResponse(err, user) {
-    errorHandler.qc(err, res, user);
-    if (err === 'EmailExistsError') { 
-      var message = 'The specified email address is currently in use.';
-      return res.status(400).json(errorHandler.buildError(err, message));
-    }
-
-    res.status(201).json(user);
   }
 }
 
 function show(req, res) {
   var p = req.params.all();
-
-  User
-    .findOne({ id: p.id })
-    .exec(function(err, user) {
-      errorHandler.qc(err, res, user);
-
-      res.status(200).json(user);
-    });
+  User.findOne({ id: p.id }).exec(sendResponse(res));
 }
 
 function modify(req, res) {
   var p = req.params.all();
-
-  User
-    .update({ id: p.id }, p)
-    .exec(function(err, user) {
-      errorHandler.qc(err, res, user);
-
-      res.status(200).json(user);
-    });
+  User.update({ id: p.id }, p).exec(sendResponse(res, 201));
 }
 
 function deactivate(req, res) {
   var p = req.params.all();
 
-  async.waterfall([ rejectIfUserDeactivated, deactivateUser ], sendResponse);
+  async.waterfall([ rejectIfUserDeactivated, deactivateUser ], sendResponse(res));
 
   function rejectIfUserDeactivated(cb) {
     User
       .findOne({ id: p.id })
       .exec(function(err, user) {
-        if (user.deletedAt) { cb('UserDeactivatedError', user); }
+        if (user.deletedAt) { cb('DocumentDeactivatedError', user); }
 
         cb(err, user);
       });
   }
 
   function deactivateUser(user, cb) {
-    User
-      .deactivate(user.id)
-      .exec(function(err, user) { cb(err, user); });
+    User.deactivate(user.id).exec(function(err, user) { cb(err, user); });
   }
+}
 
-  function sendResponse(err, user) {
-    errorHandler.qc(err, res, user);
+function sendResponse(res, successStatusCode) {
+  return function (err, object) {
+    successStatusCode = successStatusCode || 200;
+    var e = ErrorHandler.intercept(err, object);
 
-    res.status(200).json(user);
-  }
+    if (e) { 
+      return res.status(e.status).json(e);
+    }
+    else {
+      res.status(successStatusCode).json(object);
+    }
+  };
 }

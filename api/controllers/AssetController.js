@@ -85,3 +85,18 @@ function deactivate(req, res) {
     res.json(200, asset);
   }
 }
+
+
+function sendResponse(res, successStatusCode) {
+  return function (err, object) {
+    successStatusCode = successStatusCode || 200;
+    var e = ErrorHandler.intercept(err, object);
+
+    if (e) { 
+      return res.status(e.status).json(e);
+    }
+    else {
+      res.status(successStatusCode).json(object);
+    }
+  };
+}
