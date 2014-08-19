@@ -14,8 +14,7 @@ module.exports = {
 
   findByEmail: function(email, callback) {
     User.findOne({ email: email }, function(err, user) {
-      errorHandler.serverError(err, res);
-      errorHandler.nullCollection(user, res);
+      errorHandler.qc(err, res, user);
       callback(user);
     });
   },

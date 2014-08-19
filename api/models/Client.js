@@ -18,6 +18,6 @@ module.exports = {
     allowedHosts: {
       type: 'array'
     }
-  }
+}
 };
 
