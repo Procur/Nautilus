@@ -8,7 +8,6 @@
 module.exports = {
 
   adapter: 'api',
-  schema: true,
   attributes: {
 
     content: {

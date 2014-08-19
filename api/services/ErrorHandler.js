@@ -30,7 +30,7 @@ function errors () {
   };
 }
 
-function intercept (err, object) {
+function intercept (err, object, reqParams) {
   var e = false;
  
   if (this.ERRORS[err]) { e = this.ERRORS[err]; }
@@ -38,7 +38,7 @@ function intercept (err, object) {
   else if (!err && !object) { e = this.ERRORS.NullCollectionError; }
 
   if (e) { 
-    Log.create({ type: 'error', content: JSON.stringify(e) });
+    Log.create({ type: 'error', content: JSON.stringify(e), request: JSON.stringify(reqParams) });
   }
 
   return e;
