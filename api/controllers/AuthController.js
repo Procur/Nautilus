@@ -19,7 +19,9 @@ function login(req, res) {
     findUser,
     hashSubmittedPassword,
     checkHashAgainstDatabase,
-    generateApiToken
+    generateApiToken,
+    removeOldToken,
+    assignToken
   ], sendResponse);
 
   function findUser(callback) {
