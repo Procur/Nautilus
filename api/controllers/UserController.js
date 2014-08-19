@@ -24,18 +24,18 @@ function create(req, res) {
 
   function rejectIfUserExists(cb) {
     User
-      .findOne({ email: p.email })
-      .exec(function(err, user) {
-        if (user) { cb('EmailAlreadyExistsError', user); }
-        
-        cb(err, user);
-      });
+        .findOne({ email: p.email })
+        .exec(function(err, user) {
+          if (user) { cb('EmailAlreadyExistsError', user); }
+
+          cb(err, user);
+        });
   }
 
   function createUser(user, cb) {
     User
-      .create(req.params.all())
-      .exec(function(err, user) { cb(err, user); });
+        .create(req.params.all())
+        .exec(function(err, user) { cb(err, user); });
   }
 }
 
@@ -56,12 +56,12 @@ function deactivate(req, res) {
 
   function rejectIfUserDeactivated(cb) {
     User
-      .findOne({ id: p.id })
-      .exec(function(err, user) {
-        if (user.deletedAt) { cb('DocumentDeactivatedError', user); }
+        .findOne({ id: p.id })
+        .exec(function(err, user) {
+          if (user.deletedAt) { cb('DocumentDeactivatedError', user); }
 
-        cb(err, user);
-      });
+          cb(err, user);
+        });
   }
 
   function deactivateUser(user, cb) {
@@ -74,7 +74,7 @@ function sendResponse(req, res, successStatusCode) {
     successStatusCode = successStatusCode || 200;
     var e = ErrorHandler.intercept(err, object, req.params.all());
 
-    if (e) { 
+    if (e) {
       return res.status(e.status).json(e);
     }
     else {
