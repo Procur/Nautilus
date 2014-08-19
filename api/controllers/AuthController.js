@@ -14,7 +14,6 @@ module.exports = {
 
 function login(req, res) {
   var p = req.params.all();
-
   async.waterfall([
     findUser,
     hashSubmittedPassword,
@@ -25,24 +24,40 @@ function login(req, res) {
   ], sendResponse(req, res));
 
   function findUser(callback) {
-    User.findOneByEmail(p.email, function(err, user) {
-      callback(err, user);
+    User.findOne({ email: p.email }).exec(function(err, user) {
+      if(user !== undefined) {
+        callback(err, user);
+        console.log(user);
+      }
+      else {
+        callback('NullCollectionError', user);
+      }
     });
   }
 
   function hashSubmittedPassword(user, callback) {
+    console.log(p.password);
     authFunctions.hashPassword(p.password, function(err, hash) {
+      console.log('dis da hash ' + hash);
       callback(err, user, hash);
     });
   }
 
   function checkHashAgainstDatabase(user, hash, callback) {
-    var err = (user.password === hash) ? null : 'InvalidPasswordError';
-    callback(err, user);
+    //var err = (user.password === hash) ? null : 'InvalidPasswordError';
+
+    authFunctions.verifyPassword(hash, p.password, function(err, response) {
+      console.log(response);
+      if(response) {
+        callback(err, user);
+      }
+    })
+
   }
 
   function generateApiToken(user, callback) {
     tokenFunctions.generateToken(function(token) {
+      console.log(token);
       callback(null, user, token);
     });
   }
@@ -55,6 +70,7 @@ function login(req, res) {
 
   function assignToken(user, token, callback) {
     ApiToken.create({ user: user.id, token: token }, function(err, token) {
+      console.log(token);
       callback(err, token);
     });
   }

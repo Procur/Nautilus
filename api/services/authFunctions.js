@@ -9,6 +9,12 @@ module.exports = {
         callback(err, hash);
       });
     });
+  },
+
+  verifyPassword: function(hash, submittedPassword, callback){
+    bcrypt.compare(submittedPassword, hash, function(err, response){
+      callback(err, response);
+    });
   }
 
 };
