@@ -22,7 +22,8 @@ function checkUserForToken(userId, callback) {
 
 function saveToken(userId, token, callback) {
   ApiToken.create({ user: userId, token: token }, function(err, token) {
-    errorHandler.qc(err, res, token);
+    //errorHandler.qc(err, res, token);
+    if(err) { return res.send(500); }
     callback(token);
   });
 }

@@ -45,7 +45,23 @@ function login(req, res) {
 }
 
 function logout(req, res) {
-  var p = req.params.all();
+  var p = req.params.all(),
+      apiToken = req.headers.apitoken;
+
+  console.log(apiToken);
+  if(apiToken !== undefined){
+    userFunctions.findByApiToken(apiToken, function(user) {
+      console.log(user);
+      ApiToken.destroy({ user: user.id }, function(err) {
+        if(err) { return res.send(500); }
+        res.send(200, 'Sucessfully logged out');
+      });
+    });
+  }
+  else {
+    res.send(400, 'API Token not provided');
+  }
+
 }
 
 function sendResponse(req, res, successStatusCode) {

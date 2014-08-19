@@ -2,11 +2,9 @@ module.exports = {
 
   findByApiToken: function(apitoken, callback) {
     ApiToken.findOne({ token: apitoken }, function(err, token) {
-      errorHandler.serverError(err, res);
-      errorHandler.nullCollection(token, res);
+      if(err) { return res.send(500); }
       User.findOne({ id: token.user }, function(err, user) {
-        errorHandler.serverError(err, res);
-        errorHandler.nullCollection(user, res);
+        if(err) { return res.send(500); }
         callback(user);
       });
     });
@@ -14,7 +12,8 @@ module.exports = {
 
   findByEmail: function(email, callback) {
     User.findOne({ email: email }, function(err, user) {
-      errorHandler.qc(err, res, user);
+      //errorHandler.qc(err, res, user);
+
       callback(user);
     });
   },
