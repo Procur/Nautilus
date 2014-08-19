@@ -47,21 +47,26 @@ function replaceToken(userId, token, callback) {
   function destroyOldToken(token, callback) {
     ApiToken.destroy({ token: token }, function(err, token) {
       callback(err, token);
-    })
-  }
-
-  function generateNewToken(callback) {
-    var newToken = uuid.v1();
-    callback(newToken);
-  }
-
-  function checkNewTokenUniqueness(newToken, callback) {
-    ApiToken.findOne({ token: newToken }, function(err, oldToken) {
-      callback(oldToken);
     });
   }
 
-  function issueToUser(userId, token, callback) {
+  function generateNewToken(token, callback) {
+    var newToken = uuid.v1();
+    callback(null, newToken);
+  }
+
+  function checkNewTokenUniqueness(newToken, callback) {
+    ApiToken.findOne({ token: newToken }, function(err, existingToken) {
+      if (existingToken) { 
+        return replaceToken(userId, existingToken);
+      }
+      else {
+        callback(newtoken);
+      }
+    });
+  }
+
+  function issueToUser(newToken, callback) {
     ApiToken.create({ user: userId, token: token }, function (err, newToken) {
       callback(newToken);
     });
