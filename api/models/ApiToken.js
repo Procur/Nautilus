@@ -10,7 +10,15 @@ module.exports = {
   adapter: 'api',
   schema: true,
   attributes: {
+    user: {
+      model: 'user'
+    },
 
+    token: {
+      type: 'string',
+      unique: true,
+      required: true
+    }
   }
 };
 
