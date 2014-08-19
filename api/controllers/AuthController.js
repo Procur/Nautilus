@@ -62,10 +62,10 @@ function sendResponse(req, res, successStatusCode) {
   };
 }
 
+
 /*
 async.waterfall([
   findUser,
-  hashSubmittedPassword,
   checkHashAgainstDatabase,
   generateApiToken,
   removeOldToken,
@@ -76,7 +76,6 @@ function findUser(callback) {
   User.findOne({ email: p.email }).exec(function(err, user) {
     if(user !== undefined) {
       callback(err, user);
-      console.log(user);
     }
     else {
       callback('NullCollectionError', user);
@@ -84,24 +83,12 @@ function findUser(callback) {
   });
 }
 
-function hashSubmittedPassword(user, callback) {
-  console.log(p.password);
-  authFunctions.hashPassword(p.password, function(err, hash) {
-    console.log('dis da hash ' + hash);
-    callback(err, user, hash);
-  });
-}
-
 function checkHashAgainstDatabase(user, hash, callback) {
-  //var err = (user.password === hash) ? null : 'InvalidPasswordError';
-
-  authFunctions.verifyPassword(hash, p.password, function(err, response) {
+  authFunctions.verifyPassword(user.password, p.password, function(err, response) {
     console.log(response);
-    if(response) {
-      callback(err, user);
-    }
-  })
-
+    err = response ? err : "InvalidPasswordError";
+    callback(err, user);
+  });
 }
 
 function generateApiToken(user, callback) {
@@ -122,4 +109,5 @@ function assignToken(user, token, callback) {
     console.log(token);
     callback(err, token);
   });
-} */
+}
+*/
