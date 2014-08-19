@@ -6,126 +6,79 @@
  */
 
 module.exports = {
-
-  create: create,
   index: index,
+  create: create,
   show: show,
   modify: modify,
   deactivate: deactivate
-
 };
 
-  /* create: function(req, res) {
-    var p = req.params.all();
+function index(req, res) {
+  User.find().exec(sendResponse(req, res));
+}
 
-    User.findOne({ email: p.email }, function(err, user) {
-      errorHandler.serverError(err, res);
-      if(user !== undefined) {
-        res.send(400, 'The specified email address is currently in use.');
-      }
-      else {
-        authFunctions.hashPassword(p.password, function(err, hash){
-          User.create({
-            firstName: p.firstName,
-            lastName: p.lastName,
-            email: p.email,
-            password: hash,
-            activeMode: 'signup',
-            active: true,
-            companyAdmin: false,
-            defaultMode: 'signup'
-          }, function(err, user):
-            errorHandler.serverError(err, res);
-            res.status(201);
-            res.json(user);
-          });
+function create(req, res) {
+  var p = req.params.all();
+
+  async.waterfall([ rejectIfUserExists, createUser ], sendResponse(req, res, 201));
+
+  function rejectIfUserExists(cb) {
+    User
+        .findOne({ email: p.email })
+        .exec(function(err, user) {
+          if (user) { cb('EmailAlreadyExistsError', user); }
+
+          cb(err, user);
         });
-      }
-    });
-  },
-
-  index: function(req, res) {
-    User.find().exec(function(err, users){
-      errorHandler.serverError(err, res);
-      errorHandler.nullCollection(users, res);
-      res.json(users);
-    });
-  },
-
-  show: function(req, res) {
-    var p = req.params.all();
-
-    User.findOne({ id: p.id }, function(err, user){
-      errorHandler.serverError(err, res);
-      errorHandler.nullCollection(user, res);
-      res.json(200, user);
-    });
-  },
-
-  modify: function(req, res) {
-    var p = req.params.all();
-
-    User.update({ id: p.id }, p, function(err, user){
-      errorHandler.qc(err, res, user);
-      res.json(200, user);
-    });
-  },
-
-  deactivate: function(req, res) {
-    var p = req.params.all();
-    User.findOne({ id: p.id }, function(err, user){
-      errorHandler.serverError(err, res);
-      errorHandler.nullCollection(user, res);
-      if(user.active === false){
-        res.send(400, 'User is already inactive');
-      }
-      else {
-        User.update(user, { active: false }, function(err, user){
-          errorHandler.serverError(err, res);
-          errorHandler.nullCollection(user, res);
-          res.send(200, 'User account has been deactivated.');
-        });
-      }
-    });
-  },
-
-  grantGlobalAdmin: function(req, res) {
-    var p = req.params.all();
-
-    User.findOne({ id: p.id }, function(err, user) {
-      errorHandler.serverError(err, res);
-      errorHandler.nullCollection(user, res);
-      if(user.globalAdministrator === true){
-        res.send(400, 'User is already a global administrator.')
-      }
-      else {
-        User.update(user, { globalAdministrator: true }, function(err, user) {
-          errorHandler.serverError(err, res);
-          errorHandler.nullCollection(user, res);
-          res.status(200);
-          res.json(user);
-        });
-      }
-    });
-  },
-
-  revokeGlobalAdmin: function(req, res) {
-    var p = req.params.all();
-
-    User.findOne({ id: p.id }, function(err, user) {
-      errorHandler.serverError(err, res);
-      errorHandler.nullCollection(user, res);
-      if(user.globalAdministrator === false){
-        res.send(400, 'User already lacks global administrator privileges.')
-      }
-      else {
-        User.update(user, { globalAdministrator: false }, function(err, user) {
-          errorHandler.serverError(err, res);
-          errorHandler.nullCollection(user, res);
-          res.status(200);
-          res.json(user);
-        });
-      }
-    });
   }
-}; */
+
+  function createUser(user, cb) {
+    User
+        .create(req.params.all())
+        .exec(function(err, user) { cb(err, user); });
+  }
+}
+
+function show(req, res) {
+  var p = req.params.all();
+  User.findOne({ id: p.id }).exec(sendResponse(req, res));
+}
+
+function modify(req, res) {
+  var p = req.params.all();
+  User.update({ id: p.id }, p).exec(sendResponse(req, res, 201));
+}
+
+function deactivate(req, res) {
+  var p = req.params.all();
+
+  async.waterfall([ rejectIfUserDeactivated, deactivateUser ], sendResponse(req, res));
+
+  function rejectIfUserDeactivated(cb) {
+    User
+        .findOne({ id: p.id })
+        .exec(function(err, user) {
+          if (user.deletedAt) { cb('DocumentDeactivatedError', user); }
+
+          cb(err, user);
+        });
+  }
+
+  function deactivateUser(user, cb) {
+    User.deactivate(user.id).exec(function(err, user) { cb(err, user); });
+  }
+}
+
+function sendResponse(req, res, successStatusCode) {
+  return function (err, object) {
+    successStatusCode = successStatusCode || 200;
+    var e = ErrorHandler.intercept(err, object, req.params.all());
+
+    if (e) {
+      return res.status(e.status).json(e);
+    }
+    else {
+      res.status(successStatusCode).json(object);
+    }
+  };
+}
