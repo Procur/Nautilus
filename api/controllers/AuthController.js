@@ -22,7 +22,7 @@ function login(req, res) {
     generateApiToken,
     removeOldToken,
     assignToken
-  ], sendResponse);
+  ], sendResponse(req, res));
 
   function findUser(callback) {
     User.findOneByEmail(p.email, function(err, user) {
@@ -37,12 +37,8 @@ function login(req, res) {
   }
 
   function checkHashAgainstDatabase(user, hash, callback) {
-    if(user.password === hash) {
-      callback(err, user);
-    }
-    else {
-      callback('InvalidPasswordError', user);
-    }
+    var err = (user.password === hash) ? null : 'InvalidPasswordError';
+    callback(err, user);
   }
 
   function generateApiToken(user, callback) {
@@ -51,9 +47,9 @@ function login(req, res) {
     });
   }
 
-  function removeOldToken(user, callback) {
+  function removeOldToken(user, token, callback) {
     ApiToken.destroy({ user: user.id }, function(err) {
-      callback(err, user);
+      callback(err, user, token);
     });
   }
 
