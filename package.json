@@ -38,7 +38,10 @@
   "author": "strangelove",
   "license": "",
   "devDependencies": {
+    "assert": "^1.1.1",
     "chai": "^1.9.1",
+    "grunt-mocha-test": "^0.11.0",
+    "grunt-shell": "^0.7.0",
     "mocha": "^1.21.4",
     "sinon": "^1.10.3",
     "supertest": "^0.13.0"
