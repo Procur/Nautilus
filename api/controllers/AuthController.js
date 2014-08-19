@@ -19,17 +19,18 @@ function login(req, res) {
     if(user !== undefined) {
       authFunctions.verifyPassword(user.password, p.password, function(err, response) {
         if(response === true) {
-          tokenFunctions.generateToken(function(newToken) {
-            ApiToken.findOne({ token: newToken }, function(err, token) {
-              if(token === undefined) {
-                ApiToken.create({ token: newToken, user: user.id }, function(err, token) {
-                  console.log(token);
-                  res.status(200);
-                  user.token = token.token;
-                  res.json(user);
-                });
-              }
-            })
+          ApiToken.destroy({ user: user.id }, function(err) {
+            tokenFunctions.generateToken(function(newToken) {
+              ApiToken.findOne({ token: newToken }, function(err, token) {
+                if(token === undefined) {
+                  ApiToken.create({ token: newToken, user: user.id }, function(err, token) {
+                    res.status(200);
+                    user.token = token.token;
+                    res.json(user);
+                  });
+                }
+              })
+            });
           });
         }
         else {

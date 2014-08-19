@@ -9,7 +9,7 @@ module.exports = {
 };
 
 function generateToken(callback) {
-  var token = uuid.v1();
+  var token = uuid.v4();
   callback(token);
 }
 
