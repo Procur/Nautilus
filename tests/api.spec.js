@@ -1,26 +1,42 @@
 var Sails = require('sails');
-var app;
 
-describe('Global', function() {
 
-  before(function (cb) {
-    Sails.lift({}, function(err, sails) {
+describe("User Model:", function() {  
+
+  // create a variable to hold the instantiated sails server
+  var app;
+
+  // Global before hook
+  before(function(done) {
+
+    // Lift Sails and start the servers
+    Sails.lift({
+
+      log: {
+        level: 'error'
+      },
+
+    }, function(err, sails) {
       app = sails;
-      cb(err, sails);
+      done(err, sails);
     });
   });
 
-  after(function (cb) {
-    app.lower(cb);
+  // Global after hook
+  after(function(done) {
+    app.lower(done);
   });
 
 var request = require('supertest');
-
-describe('Users', function() {
-  it('returns 200 status', function() {
-    request(app)
+  describe('Users', function() {
+    it('returns 200 status', function() {
+      console.log(app.hooks.http.app);
+      request(app.hooks.http.app)
       .get('/users')
       .expect(200, done);
+    });
   });
 });
-});
+
+
+
