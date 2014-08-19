@@ -29,8 +29,7 @@ describe("User Model:", function() {
 
 var request = require('supertest');
   describe('Users', function() {
-    it('returns 200 status', function() {
-      console.log(app.hooks.http.app);
+    it('returns 200 status', function(done) {
       request(app.hooks.http.app)
       .get('/users')
       .expect(200, done);
