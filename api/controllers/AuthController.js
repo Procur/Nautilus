@@ -14,6 +14,8 @@ module.exports = {
 
 function login(req, res) {
   var p = req.params.all();
+  return console.log(req.host);
+  //res.json(req);
 }
 
 function logout(req, res) {
