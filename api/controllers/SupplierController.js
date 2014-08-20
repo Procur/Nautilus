@@ -8,15 +8,36 @@
 module.exports = {
 
   create: function(req, res) {
+    var p = req.params.all(),
+        apiToken = req.headers.apitoken;
 
+    userFunctions.findByApiToken(apiToken, function(user) {
+      if(!user.supplier) {
+        Supplier.create(p, function(err, supplier) {
+          if(err) { return res.send(500); }
+          return res.json(201, supplier); //TODO: I feel like this needs to update company as well.
+        });
+      }
+      else {
+        res.send(400, 'This company is already a supplier.')
+      }
+    });
   },
 
   index: function(req, res) {
-
+    Supplier.find(function(err, suppliers) {
+      if(err) { return res.send(500); }
+      res.json(200, suppliers);
+    });
   },
 
   show: function(req, res) {
+    var p = req.params.all();
 
+    Supplier.findOne({ id: p.id }, function(err, supplier) {
+      if(err) { return res.send(500); }
+      res.json(200, supplier);
+    });
   },
 
   modify: function(req, res) {
@@ -26,6 +47,5 @@ module.exports = {
   deactivate: function(req, res) {
 
   }
-	
-};
 
+};
