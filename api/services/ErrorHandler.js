@@ -34,7 +34,9 @@ function intercept (err, object, reqParams) {
   var e = false;
  
   if (this.ERRORS[err]) { e = this.ERRORS[err]; }
-  else if (err) { e = this.ERRORS.InternalServerError; }
+  else if (err) { e = { error: 'It looks like you created an error but forgot to add it to api/services/ErrorHandler.js' }; }
+  // Swap lines above and below this comment for production deploys.
+  //else if (err) { e = this.ERRORS.InternalServerError; }
   else if (!err && !object) { e = this.ERRORS.NullCollectionError; }
 
   if (e) { 

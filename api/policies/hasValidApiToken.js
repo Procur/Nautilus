@@ -2,14 +2,17 @@ module.exports = function(req, res, next) {
 
   var apiToken = req.headers.apitoken;
 
-  ApiToken.findOne({ token: apiToken }, function(err, token) {
-    if(err) { return res.send(500); }
-    if(token !== undefined) {
+  // DO NOT RELEASE INTO PRODUCTION!!!
+  if (apiToken === 'skipme') { return next(); }
+  // DO NOT RELEASE INTO PRODUCTION!!!
+
+  ApiToken
+    .findOne({ token: apiToken })
+    .exec(function(err, token) {
+      if (err || !token) { return res.forbidden(); }
+
       return next();
-    }
-    else {
-      return res.send(400, 'Invalid API token');
-    }
   });
+
 
 };

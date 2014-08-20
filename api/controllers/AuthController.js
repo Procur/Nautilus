@@ -15,56 +15,54 @@ module.exports = {
 function login(req, res) {
   var p = req.params.all();
 
-  User.findOne({ email: p.email }, function(err, user) {
-    if(user !== undefined) {
-      authFunctions.verifyPassword(user.password, p.password, function(err, response) {
-        if(response === true) {
-          ApiToken.destroy({ user: user.id }, function(err) {
-            tokenFunctions.generateToken(function(newToken) {
-              ApiToken.findOne({ token: newToken }, function(err, token) {
-                if(token === undefined) {
-                  ApiToken.create({ token: newToken, user: user.id }, function(err, token) {
-                    User.update(user.id, { apiToken: token.token }, function(err, user) {
-                      if(err) { return res.send(500); }
-                      res.status(200);
-                      //user.token = token.token;
-                      res.json(user);
-                    });
-                  });
-                }
-              })
-            });
+  async.waterfall([ verifyPassword, destroyToken, createNewToken ], sendResponse(req, res));
+
+  function verifyPassword(cb) {
+    User
+      .findOne({ email: p.email })
+      .exec(function(err, user) {
+        authFunctions
+          .verifyPassword(user.password, p.password, function(err, passwordsMatch) {
+            err = (passwordsMatch) ? err : 'InvalidPasswordError';
+            cb(err, user);
           });
-        }
-        else {
-          return res.send(400, 'Password incorrect');
-        }
       });
-    }
-    else {
-      return res.send(400, 'Email incorrect');
-    }
-  });
+  }
+
+  function destroyToken(user, cb) {
+    ApiToken
+      .destroy({ user: user.id })
+      .exec(function(err) { cb(err, user); });
+  }
+
+  function createNewToken(user, cb) {
+    var newToken = tokenFunctions.generateToken();
+    
+    ApiToken
+      .create({ token: newToken, user: user.id })
+      .exec(function(err, token) {
+        User
+          .update(user.id, { apiToken: token.token })
+          .exec(function(err, user) { 
+            cb(err, user);
+          });
+      });
+  } 
 }
 
 function logout(req, res) {
   var p = req.params.all(),
       apiToken = req.headers.apitoken;
 
-  console.log(apiToken);
-  if(apiToken !== undefined){
-    userFunctions.findByApiToken(apiToken, function(user) {
-      console.log(user);
-      ApiToken.destroy({ user: user.id }, function(err) {
-        if(err) { return res.send(500); }
-        res.send(200, 'Sucessfully logged out');
-      });
+  userFunctions
+    .findByApiToken(apiToken, function(user) {
+      if (!user) { return res.forbidden(); }
+      ApiToken
+        .destroy({ user: user.id })
+        .exec(function(err) {
+          sendResponse(req, res)(err, { message: 'Log out successful.' });
+        });
     });
-  }
-  else {
-    res.send(400, 'API Token not provided');
-  }
-
 }
 
 function sendResponse(req, res, successStatusCode) {

@@ -33,8 +33,8 @@ function create(req, res) {
 
   function createUser(user, cb) {
     User
-        .create(req.params.all())
-        .exec(function(err, user) { cb(err, user); });
+      .create(req.params.all())
+      .exec(function(err, user) { cb(err, user); });
   }
 }
 

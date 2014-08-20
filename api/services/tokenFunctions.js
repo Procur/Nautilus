@@ -8,9 +8,8 @@ module.exports = {
 
 };
 
-function generateToken(callback) {
-  var token = uuid.v4();
-  callback(token);
+function generateToken() {
+  return uuid.v4();
 }
 
 function checkUserForToken(userId, callback) {
