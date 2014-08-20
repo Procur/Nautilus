@@ -9,6 +9,9 @@ module.exports = function(req, res, next) {
       if ((client.allowedHosts.indexOf(host) > -1) && (clientId == client.id)) {
         return next();
       }
+      else {
+        return res.send(400, 'Invalid host');
+      }
     }
     else {
       return res.send(400, 'Invalid client ID');
