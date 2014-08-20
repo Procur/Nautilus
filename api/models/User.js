@@ -22,6 +22,10 @@ module.exports = {
 function attributes() {
   return {
 
+    apiToken: {
+      model: 'ApiToken'
+    },
+
     firstName: {
       type: 'string',
       required: true

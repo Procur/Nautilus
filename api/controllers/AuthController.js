@@ -24,6 +24,7 @@ function login(req, res) {
               ApiToken.findOne({ token: newToken }, function(err, token) {
                 if(token === undefined) {
                   ApiToken.create({ token: newToken, user: user.id }, function(err, token) {
+                    if(err) { return res.send(500) }
                     res.status(200);
                     user.token = token.token;
                     res.json(user);
