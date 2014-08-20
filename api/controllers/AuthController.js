@@ -54,9 +54,9 @@ function logout(req, res) {
   var p = req.params.all(),
       apiToken = req.headers.apitoken;
 
-  userFunctions
-    .findByApiToken(apiToken, function(user) {
-      if (!user) { return res.forbidden(); }
+  User
+    .findOneByApiToken(apiToken, function(err, user) {
+      if (err || !user) { return res.forbidden(); }
       ApiToken
         .destroy({ user: user.id })
         .exec(function(err) {
