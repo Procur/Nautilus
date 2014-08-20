@@ -11,9 +11,6 @@ module.exports = {
   schema: true,
   attributes: attributes(),
 
-  // Custom class methods
-  deactivate: deactivate,
-
   // Lifecycle callbacks
   beforeCreate: hashPassword
     
@@ -114,11 +111,6 @@ function attributes() {
       type: 'boolean'
     }
   };
-}
-
-function deactivate(userId) {
-  var now = new Date();
-  return User.update({ id: userId }, { deletedAt: now });
 }
 
 function hashPassword(values, cb) {

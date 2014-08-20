@@ -24,12 +24,11 @@ function create(req, res) {
 
   function rejectIfUserExists(cb) {
     User
-        .findOne({ email: p.email })
-        .exec(function(err, user) {
-          if (user) { cb('EmailAlreadyExistsError', user); }
-
-          cb(err, user);
-        });
+      .findOne({ email: p.email })
+      .exec(function(err, user) {
+        err = (user) ? 'EmailAlreadyExistsError' : err;
+        cb(err, user);
+      });
   }
 
   function createUser(user, cb) {
@@ -56,12 +55,11 @@ function deactivate(req, res) {
 
   function rejectIfUserDeactivated(cb) {
     User
-        .findOne({ id: p.id })
-        .exec(function(err, user) {
-          if (user.deletedAt) { cb('DocumentDeactivatedError', user); }
-
-          cb(err, user);
-        });
+      .findOne({ id: p.id })
+      .exec(function(err, user) {
+        err = (user.deletedAt) ? 'DocumentDeactivatedError' : err;
+        cb(err, user);
+      });
   }
 
   function deactivateUser(user, cb) {
@@ -74,11 +72,11 @@ function sendResponse(req, res, successStatusCode) {
     successStatusCode = successStatusCode || 200;
     var e = ErrorHandler.intercept(err, object, req.params.all());
 
-    if (e) {
-      return res.status(e.status).json(e);
+    if (e) { 
+      return res.json(e.status, e);
     }
     else {
-      res.status(successStatusCode).json(object);
+      return res.json(successStatusCode, object);
     }
   };
 }
