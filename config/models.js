@@ -11,14 +11,12 @@
 
 module.exports.models = {
 
-  /***************************************************************************
-  *                                                                          *
-  * Your app's default connection. i.e. the name of one of your app's        *
-  * connections (see `config/connections.js`)                                *
-  *                                                                          *
-  ***************************************************************************/
+  migrate: 'alter',
+  deactivate: deactivate
 
-  migrate: 'alter'
-  
-  // connection: 'localDiskDb'
 };
+
+function deactivate (objectId) {
+  var now = new Date();
+  return this.update({ id: objectId }, { deletedAt: now });
+}

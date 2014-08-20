@@ -8,5 +8,8 @@ module.exports.routes = {
 
   'get /users': 'UserController.index',
 
-  'get /hosttest': 'AuthController.login'
+  'get /users/:id': 'UserController.show',
+  'delete /users/:id': 'UserController.deactivate',
+
+  'get /companies': 'CompanyController.index'
 };
