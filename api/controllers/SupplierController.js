@@ -41,11 +41,21 @@ module.exports = {
   },
 
   modify: function(req, res) {
+    var p = req.params.all();
 
+    Supplier.update(p, function(err, supplier) {
+      if(err) { return res.send(500); }
+      res.json(200, supplier);
+    });
   },
 
   deactivate: function(req, res) {
+    var p = req.params.all();
 
+    Supplier.update({ active: false }, function(err, supplier) {
+      if(err) { return res.send(500); }
+      res.send(200, 'Supplier has been deactivated.');
+    });
   }
 
 };
