@@ -9,6 +9,7 @@ module.exports = {
 
   adapter: 'api',
   schema: true,
+  autoPK: false,
   attributes: {
     user: {
       model: 'user'
