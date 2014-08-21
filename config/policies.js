@@ -12,10 +12,10 @@
 
 module.exports.policies = {
 
-  '*': 'hasValidApiToken',
+  '*': 'apiTokenAuthentication',
   AuthController: {
     login: true,
-    logout: 'hasValidApiToken'
+    logout: 'apiTokenAuthentication'
   },
 
   UserController: {

@@ -2,9 +2,9 @@ module.exports = function(req, res, next) {
 
   var apiToken = req.headers.apitoken;
 
-  // DO NOT RELEASE INTO PRODUCTION!!!
-  if (apiToken === 'skipme') { return next(); }
-  // DO NOT RELEASE INTO PRODUCTION!!!
+  if (sails.config.environment !== 'production') {
+    if (apiToken === 'skipme') { return next(); }
+  }
   
   async.waterfall([ validateApiToken, fetchCurrentUser], nextPolicy);
 
@@ -12,7 +12,7 @@ module.exports = function(req, res, next) {
     ApiToken
       .findOne({ token: apiToken })
       .exec(function(err, token) {
-        err = (token) ? err : 'InvalidApiTokenError';
+        err = (token) ? err : 'invalidApiToken';
         cb(err, token);
       });
   }
@@ -21,7 +21,7 @@ module.exports = function(req, res, next) {
     User
       .findOne({ id: token.user })
       .exec(function(err, user) {
-        err = (user) ? err : 'InvalidApiTokenError';
+        err = (user) ? err : 'invalidApiToken';
         cb(err, user);
       });
   }

@@ -6,9 +6,7 @@ module.exports.routes = {
   'post /login': 'AuthController.login',
   'get /logout': 'AuthController.logout',
 
-  'get /users': 'UserController.index',
-
-  'get /users/:id': 'UserController.show',
+  'get /users': 'UserController.show',
   'delete /users/:id': 'UserController.deactivate',
 
   'get /companies': 'CompanyController.index'

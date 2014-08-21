@@ -1,3 +1,4 @@
+
 /**
  * 200 (OK) Response
  *
@@ -11,15 +12,15 @@
  *          - pass string to render specified view
  */
 
-module.exports = function sendOK (data, options) {
+module.exports = function sendResourceCreated (data, options) {
 
   var req = this.req;
   var res = this.res;
   var sails = req._sails;
 
-  sails.log.silly('res.ok() :: Sending 200 ("OK") response');
+  sails.log.silly('res.ok() :: Sending 201 ("Resource Created") response');
 
-  res.status(200);
+  res.status(201);
   return res.json(data);
 
 };
