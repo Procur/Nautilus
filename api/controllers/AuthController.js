@@ -15,7 +15,7 @@ module.exports = {
 function login(req, res) {
   var p = req.params.all();
 
-  async.waterfall([ verifyPassword, destroyToken, createNewToken ], sendResponse(req, res));
+  async.waterfall([ verifyPassword, destroyToken, createNewToken ], Responder.dispatch(req, res));
 
   function verifyPassword(cb) {
     User
@@ -23,7 +23,7 @@ function login(req, res) {
       .exec(function(err, user) {
         authFunctions
           .verifyPassword(user.password, p.password, function(err, passwordsMatch) {
-            err = (passwordsMatch) ? err : 'InvalidPasswordError';
+            err = (passwordsMatch) ? err : 'badLogin';
             cb(err, user);
           });
       });
@@ -57,20 +57,6 @@ function logout(req, res) {
   ApiToken
     .destroy({ user: user.id })
     .exec(function(err) {
-      sendResponse(req, res)(err, { message: 'Log out successful.' });
+      Responder.dispatch(req, res)(err, { message: 'Log out successful.' });
     });
-}
-
-function sendResponse(req, res, successStatusCode) {
-  return function (err, object) {
-    successStatusCode = successStatusCode || 200;
-    var e = ErrorHandler.intercept(err, object, req.params.all());
-
-    if (e) {
-      return res.status(e.status).json(e);
-    }
-    else {
-      res.status(successStatusCode).json(object);
-    }
-  };
 }

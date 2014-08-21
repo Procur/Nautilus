@@ -17,7 +17,7 @@ function heartbeat (req, res) {
     documentation: 'http://api.procur.com/docs'
   };
 
-  res.ok(payload);
+  return res.ok(payload);
 }
 
 function docs (req, res) {
