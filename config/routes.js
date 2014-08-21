@@ -1,6 +1,7 @@
 module.exports.routes = {
 
   'get /': 'UtilityController.heartbeat',
+  'get /docs': 'UtilityController.docs',
 
   'post /signup': 'UserController.create',
   'post /login': 'AuthController.login',

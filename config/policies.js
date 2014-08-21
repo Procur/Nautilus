@@ -13,6 +13,10 @@
 module.exports.policies = {
 
   '*': 'apiTokenAuthentication',
+  UtilityController: { 
+    '*': true
+  },
+
   AuthController: {
     login: true,
     logout: 'apiTokenAuthentication'
