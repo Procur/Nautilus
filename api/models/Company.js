@@ -9,8 +9,12 @@ module.exports = {
 
   adapter: 'api',
   schema: true,
-  attributes: {
+  attributes: attributes()
+  
+};
 
+function attributes() {
+  return {
     name: {
       type: 'string',
       required: true,
@@ -107,5 +111,4 @@ module.exports = {
     }
 
   }
-};
-
+}
