@@ -27,7 +27,7 @@ module.exports = function(req, res, next) {
   }
 
   function nextPolicy(err, user) {
-    if (err) { return res.forbidden(err); }
+    if (err) { return res.unauthorized(err); }
     
     req.currentUser = user;
     return next();
