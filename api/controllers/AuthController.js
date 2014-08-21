@@ -52,16 +52,12 @@ function login(req, res) {
 
 function logout(req, res) {
   var p = req.params.all(),
-      apiToken = req.headers.apitoken;
+      user = req.currentUser;
 
-  User
-    .findOneByApiToken(apiToken, function(err, user) {
-      if (err || !user) { return res.forbidden(); }
-      ApiToken
-        .destroy({ user: user.id })
-        .exec(function(err) {
-          sendResponse(req, res)(err, { message: 'Log out successful.' });
-        });
+  ApiToken
+    .destroy({ user: user.id })
+    .exec(function(err) {
+      sendResponse(req, res)(err, { message: 'Log out successful.' });
     });
 }
 

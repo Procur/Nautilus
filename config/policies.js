@@ -16,6 +16,10 @@ module.exports.policies = {
   AuthController: {
     login: true,
     logout: 'hasValidApiToken'
+  },
+
+  UserController: {
+    create: true
   }
 
 };
