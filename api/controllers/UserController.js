@@ -21,7 +21,7 @@ function create(req, res) {
     User
       .findOne({ email: p.email })
       .exec(function(err, user) {
-        err = (user) ? 'badRequest' : err;
+        err = (user) ? 'emailExists' : err;
         cb(err, user);
       });
   }
@@ -45,21 +45,7 @@ function modify(req, res) {
 }
 
 function deactivate(req, res) {
-  var p = req.params.all();
-
-  async.waterfall([ rejectIfUserDeactivated, deactivateUser ], Responder.dispatch(req, res));
-
-  function rejectIfUserDeactivated(cb) {
-    User
-      .findOne({ id: p.id })
-      .exec(function(err, user) {
-        err = (user.deletedAt) ? 'recordDeleted' : err;
-        cb(err, user);
-      });
-  }
-
-  function deactivateUser(user, cb) {
-    User.deactivate(user.id).exec(function(err, user) { cb(err, user); });
-  }
+  var user = req.currentUser;
+  User.deactivate(user.id).exec(Responder.dispatch(req, res));
 }
 

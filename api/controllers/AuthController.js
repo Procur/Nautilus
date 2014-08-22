@@ -15,17 +15,22 @@ module.exports = {
 function login(req, res) {
   var p = req.params.all();
 
-  async.waterfall([ verifyPassword, destroyToken, createNewToken ], Responder.dispatch(req, res));
+  async.waterfall([ fetchUser, verifyPassword, destroyToken, createNewToken ], Responder.dispatch(req, res));
 
-  function verifyPassword(cb) {
+  function fetchUser(cb) {
     User
       .findOne({ email: p.email })
       .exec(function(err, user) {
-        authFunctions
-          .verifyPassword(user.password, p.password, function(err, passwordsMatch) {
-            err = (passwordsMatch) ? err : 'badLogin';
-            cb(err, user);
-          });
+        err = (user) ? err : 'badRequest';
+        cb(err, user);
+      });
+  }
+
+  function verifyPassword(user, cb) {
+    authFunctions
+      .verifyPassword(user.password, p.password, function(err, passwordsMatch) {
+        err = (passwordsMatch) ? err : 'badLogin';
+        cb(err, user);
       });
   }
 

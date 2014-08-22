@@ -9,7 +9,7 @@ module.exports.routes = {
 
 
   'get /users': 'UserController.show',
-  'delete /users/:id': 'UserController.deactivate',
+  'delete /users': 'UserController.deactivate',
 
   'get /companies': 'CompanyController.index'
 
