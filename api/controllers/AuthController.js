@@ -43,8 +43,8 @@ function login(req, res) {
       .exec(function(err, token) {
         User
           .update(user.id, { apiToken: token.token })
-          .exec(function(err, user) { 
-            cb(err, user);
+          .exec(function(err, users) { 
+            cb(err, users[0]);
           });
       });
   } 
