@@ -1,7 +1,7 @@
 var Sails = require('sails');
 var app;
 
-before(function(done) {
+before(function(cb) {
     // Lift Sails and store the app reference
     Sails.lift({
 
@@ -16,12 +16,12 @@ before(function(done) {
     }, function(err, sails) {
         // save reference for teardown function
         app = sails;
-        done(err);
+        cb(err);
     });
 });
 
 
 // After Function
-after(function(done) {
-    app.lower(done);
+after(function(cb) {
+    app.lower(cb);
 });
