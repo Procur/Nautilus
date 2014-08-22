@@ -49,3 +49,21 @@ function sendResponse(req, res, successStatusCode) {
     }
   };
 }
+
+//////////////////////////
+
+function setUserProfilePhoto(req, res) {
+
+}
+
+function setCompanyLogo(req, res) {
+
+}
+
+function setBuyerLogo(req, res) {
+
+}
+
+function setSupplierLogo(req, res) {
+
+}
