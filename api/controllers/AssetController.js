@@ -53,17 +53,21 @@ function sendResponse(req, res, successStatusCode) {
 //////////////////////////
 
 function setUserProfilePhoto(req, res) {
+  var p = req.params.all;
 
 }
 
 function setCompanyLogo(req, res) {
+  var p = req.params.all;
 
 }
 
 function setBuyerLogo(req, res) {
+  var p = req.params.all;
 
 }
 
 function setSupplierLogo(req, res) {
+  var p = req.params.all;
 
 }
