@@ -49,7 +49,7 @@ function login(req, res) {
         User
           .update(user.id, { apiToken: token.token })
           .exec(function(err, users) { 
-            cb(err, users[0]);
+            cb(err, users);
           });
       });
   } 

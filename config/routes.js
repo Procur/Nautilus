@@ -7,8 +7,8 @@ module.exports.routes = {
   'post /login': 'AuthController.login',
   'get /logout': 'AuthController.logout',
 
-
   'get /users': 'UserController.show',
+  'put /users': 'UserController.modify',
   'delete /users': 'UserController.deactivate',
 
   'get /companies': 'CompanyController.index'

@@ -27,7 +27,8 @@ function create(req, res) {
   }
 
   function createUser(user, cb) {
-    User.create(req.params.all()).exec(function(err, user) { cb(err, user); });
+    p.companyAdmin = true;
+    User.create(p).exec(function(err, user) { cb(err, user); });
   }
 }
 

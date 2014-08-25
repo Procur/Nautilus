@@ -57,7 +57,8 @@ function attributes() {
 
     activeMode: {
       type: 'string',
-      required: true
+      required: true,
+      defaultsTo: 'pending'
     },
 
     deletedAt: {
@@ -83,7 +84,8 @@ function attributes() {
 
     defaultMode: {
       type: 'string',
-      required: true
+      required: true,
+      defaultsTo: 'pending'
     },
 
     company: {
@@ -111,6 +113,10 @@ function attributes() {
     },
 
     globalAdmin: {
+      type: 'boolean'
+    },
+
+    notBfg: { // not branded, finished goods
       type: 'boolean'
     }
   };
