@@ -8,8 +8,11 @@
 module.exports = {
 
   adapter: 'api',
-  schema: true,
-  attributes: attributes()
+  schema: false,
+  attributes: attributes(),
+
+  // Lifecycle callbacks
+  beforeValidate: beforeValidate
   
 };
 
@@ -22,7 +25,8 @@ function attributes() {
     },
 
     phone: {
-      countryCode: {
+      type: 'json'
+     /* countryCode: {
         type: 'string',
         required: true
       },
@@ -34,23 +38,11 @@ function attributes() {
 
       extension: {
         type: 'string'
-      }
+      } */
     },
 
     fax: {
-      countryCode: {
-        type: 'string',
-        required: true
-      },
-
-      number: {
-        type: 'string',
-        required: true
-      },
-
-      extension: {
-        type: 'string'
-      }
+      type: 'json'
     },
 
     email: {
@@ -88,13 +80,16 @@ function attributes() {
       required: true,
       unique: true
     },
-
-    active: {
-      type: 'boolean',
-      required: true
+    testArray: {
+      type:'array'
     },
-
     //ASSOCIATIONS HERE//
+    users: {
+      type: 'array',
+      collection: 'user',
+      via: 'company',
+      dominant: true
+    },
 
     locations: {
       collection: 'location',
@@ -109,6 +104,15 @@ function attributes() {
     logo: {
       type: 'string'
     }
-
-  }
+  };
 }
+
+function beforeValidate(values, cb) {
+  if (values.phone || values.fax){
+ //  console.log(values.phone);
+ //  console.log(values.fax);
+  } 
+  cb();
+}   
+
+
