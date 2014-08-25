@@ -27,9 +27,7 @@ function create(req, res) {
   }
 
   function createUser(user, cb) {
-    User
-      .create(req.params.all())
-      .exec(function(err, user) { cb(err, user); });
+    User.create(req.params.all()).exec(function(err, user) { cb(err, user); });
   }
 }
 
@@ -48,4 +46,3 @@ function deactivate(req, res) {
   var user = req.currentUser;
   User.deactivate(user.id).exec(Responder.dispatch(req, res));
 }
-
