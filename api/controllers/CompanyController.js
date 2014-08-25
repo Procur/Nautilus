@@ -18,19 +18,23 @@ module.exports = {
 ////////////////////////////////////////
 
 function create(req, res) {
-  var p = req.params.all();
+  var
+    p = req.params.all();
+    user = req.currentUser;
 
-  userFunctions.findByApiToken(p.apitoken, function(user){
-    if(user.company !== undefined) {
-      Company.create(p, function(err, company) {
-        errorHandler.qc(err, res, company);
-        res.json(201, company);
+  if(!user.company) {
+    Company.create(p).exec(function(err, company){ 
+      company.users.add(user);
+      Company.native(function(err, collection) {
+        collection.update({name: company.name}, {$push: {users: {id: user.id}}}, function(err, data) {console.log(data);});
       });
-    }
-    else {
-      res.send(400, 'This user already belongs to a company.');
-    }
-  });
+      company.save(function(err) {if (err) console.log(err);});
+      res.json(201, company);
+    });
+  }
+  else {
+    res.send(400, 'This user already belongs to a company.');
+  }
 }
 
 ////////////////////////////////////////
