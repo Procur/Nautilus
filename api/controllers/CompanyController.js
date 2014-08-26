@@ -4,6 +4,7 @@
  * @description :: Server-side logic for managing companies
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
+var mongo = require('sails-mongo');
 
 module.exports = {
 
@@ -21,32 +22,30 @@ function create(req, res) {
   var
     p = req.params.all();
     user = req.currentUser;
+  
+  async.waterfall([rejectIfUserHasCompany, createCompany, addAssociation], Responder.dispatch(req, res, 201));
+  function rejectIfUserHasCompany (cb){
+    err = (user.company) ? 'userHasCompany' : undefined;
+    cb(err);
+  }
 
-  if(!user.company) {
-    Company.create(p).exec(function(err, company){ 
-      company.users.add(user);
-      Company.native(function(err, collection) {
-        collection.update({name: company.name}, {$push: {users: {id: user.id}}}, function(err, data) {console.log(data);});
-      });
-      company.save(function(err) {if (err) console.log(err);});
-      res.json(201, company);
-    });
+  function createCompany(cb) {
+    Company.create(p).exec(function(err, company) { cb(err, company); });
   }
-  else {
-    res.send(400, 'This user already belongs to a company.');
+
+  function addAssociation(company, cb) {
+    company.users.add(user);
+    company.save(function (err) { cb(err, company); });
   }
+
 }
 
 ////////////////////////////////////////
 
 function index(req, res) {
-  Company.find()
-      .then(function(companies) {
-        errorHandler.nullCollection(companies, res);
-        res.json(200, companies);
-      }).fail(function(err) {
-        errorHandler.serverError(err, res);
-      });
+  var user = req.currentUser;
+  Company.find(user.company).exec(Responder.dispatch(req, res, 201));
+
 }
 
 ////////////////////////////////////////

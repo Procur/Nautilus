@@ -37,6 +37,7 @@ module.exports = function badRequest(data, options) {
   if (options === 'invalidApiToken') { response.message = 'Your API token is invalid.'; }
   if (options === 'invalidPhoneOrFax') { response.message = 'Validation Error: Check your phone or fax number.'; }
   if (options === 'badRequest') { response.message = 'No known user\'s email address is associated with this request.'; }
+  if (options === 'userHasCompany') { response.message = 'A company already exists for this user.'; }
 
   res.status(400);
   res.json(response);

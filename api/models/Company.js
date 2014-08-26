@@ -8,7 +8,7 @@
 module.exports = {
 
   adapter: 'api',
-  schema: false,
+  schema: true,
   attributes: attributes(),
 
   // Lifecycle callbacks
@@ -26,19 +26,6 @@ function attributes() {
 
     phone: {
       type: 'json'
-     /* countryCode: {
-        type: 'string',
-        required: true
-      },
-
-      number: {
-        type: 'string',
-        required: true
-      },
-
-      extension: {
-        type: 'string'
-      } */
     },
 
     fax: {
@@ -80,15 +67,19 @@ function attributes() {
       required: true,
       unique: true
     },
-    testArray: {
-      type:'array'
-    },
+
     //ASSOCIATIONS HERE//
     users: {
-      type: 'array',
       collection: 'user',
-      via: 'company',
-      dominant: true
+      via: 'company'
+    },
+
+    buyer: {
+      model: 'buyer'
+    },
+
+    supplier: {
+      model: 'supplier'
     },
 
     locations: {
@@ -110,10 +101,9 @@ function attributes() {
 function beforeValidate(values, cb) {
   var phones = [ values.phone, values.fax ],
       err;
-
   phones = _.map(phones, function(phone) {
     if (!phone) { return undefined; }
-    phone = _.pick(JSON.parse(phone), ['countryCode', 'number', 'extension']);
+    phone = _.pick(phone, ['countryCode', 'number', 'extension']);
     if (!ValidationService.isValidPhoneObject(phone)) { err = 'invalidPhoneOrFax'; }
 
     return phone;
