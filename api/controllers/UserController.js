@@ -22,11 +22,11 @@ function create(req, res) {
       .findOne({ email: p.email })
       .exec(function(err, user) {
         err = (user) ? 'emailExists' : err;
-        cb(err, user);
+        cb(err);
       });
   }
 
-  function createUser(user, cb) {
+  function createUser(cb) {
     p.companyAdmin = true;
     User.create(p).exec(function(err, user) { cb(err, user); });
   }
@@ -45,5 +45,18 @@ function modify(req, res) {
 
 function deactivate(req, res) {
   var user = req.currentUser;
-  User.deactivate(user.id).exec(Responder.dispatch(req, res));
+
+  async.waterfall([ deactivateUser, destroyApiToken ], Responder.dispatch(req, res));
+
+  function deactivateUser(cb) {
+    User.deactivate(user.id).exec(function(err, user) { cb(err); });
+  }
+  
+  function destroyApiToken(cb) {
+    ApiToken
+      .destroy({ user: user.id })
+      .exec(function(err) {
+        cb(err, { message: "User deleted. Log out successful." });
+      });
+  }
 }

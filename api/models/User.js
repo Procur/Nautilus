@@ -11,9 +11,6 @@ module.exports = {
   schema: true,
   attributes: attributes(),
 
-  // Class methods
-  findOneByApiToken: findOneByApiToken,
-
   // Lifecycle callbacks
   beforeCreate: hashPassword
     
@@ -120,24 +117,6 @@ function attributes() {
       type: 'boolean'
     }
   };
-}
-
-function findOneByApiToken(apitoken, cb) {
-
-  async.waterfall([ fetchApiToken, fetchUser ], returnUser);
-
-  function fetchApiToken(cb) {
-    ApiToken.findOne({ token: apitoken }).exec(function(err, token) { cb(err, token); });
-  }
-
-  function fetchUser(token, cb) {
-    User.findOne({ id: token.user }).exec(function(err, user) { cb(err, user); });
-  }
-
-  function returnUser(err, user) {
-    cb(err, user);
-  }
-
 }
 
 function hashPassword(values, cb) {
