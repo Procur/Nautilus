@@ -16,15 +16,15 @@ module.exports = {
   },
 
   show: function(req, res) {
-
+    Buyer.findOne(req.currentUser.buyer, { active: false }, Responder.dispatch(req, res));
   },
 
   modify: function(req, res) {
-
+    Buyer.update(req.currentUser.buyer, { active: false }, Responder.dispatch(req, res, 201));
   },
 
   deactivate: function(req, res) {
-
+    Buyer.update(req.currentUser.buyer, { active: false }, Responder.dispatch(req, res, 201));
   }
 };
 
