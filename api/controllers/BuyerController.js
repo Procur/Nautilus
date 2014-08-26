@@ -18,7 +18,7 @@ module.exports = {
   },
 
   modify: function(req, res) {
-    Buyer.update(req.currentUser.buyer, { active: false }, Responder.dispatch(req, res, 201));
+    Buyer.update(req.currentUser.buyer, p, Responder.dispatch(req, res, 201));
   },
 
   deactivate: function(req, res) {
@@ -29,7 +29,7 @@ module.exports = {
 function create(req, res) {
   var p = req.params.all();
 
-  async.waterfall([ rejectIfAlreadyBuyer, createBuyer ], Responder.dispatch(req, res, 201));
+  async.waterfall([ rejectIfAlreadyBuyer, createBuyer, updateUser ], Responder.dispatch(req, res, 201));
 
   function rejectIfAlreadyBuyer(cb) {
     Buyer.findOne({ id: req.currentUser.buyer }, function(err, buyer) {
