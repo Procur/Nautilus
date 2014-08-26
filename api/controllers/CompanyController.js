@@ -67,26 +67,10 @@ function show(req, res) {
 ////////////////////////////////////////
 
 function modify(req, res) {
-  var p = req.params.all();
+  var p = req.params.all(),
+      user = req.currentUser;
 
-  async.waterfall([ fetchCompany, modifyCompany], sendResponse);
-
-  function fetchCompany(callback) {
-    Company.findOne({ id: p.id }, function(err, company) {
-      callback(company);
-    });
-  }
-
-  function modifyCompany(company, callback) {
-    Company.update(company, p, function(err, company) {
-      callback(company);
-    });
-  }
-
-  function sendResponse(err, company) {
-    errorHandler.qc(err, res, company);
-    res.json(200, company);
-  }
+  Company.update(user.company, p).exec(Responder.dispatch(req, res, 201));
 }
 
 ////////////////////////////////////////
