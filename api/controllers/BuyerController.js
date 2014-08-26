@@ -39,7 +39,7 @@ function create(req, res) {
 
   function createBuyer(buyer, cb) {
     Buyer.create(p, function(err, buyer) {
-      callback(err, buyer);
+      cb(err, buyer);
     });
   }
 
