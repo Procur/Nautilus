@@ -7,24 +7,19 @@
 
 module.exports = {
 
+  index: index,
   create: create,
-
-  index: function(req, res) {
-
-  },
-
-  show: function(req, res) {
-    Buyer.findOne(req.currentUser.buyer, { active: false }, Responder.dispatch(req, res));
-  },
-
-  modify: function(req, res) {
-    Buyer.update(req.currentUser.buyer, p, Responder.dispatch(req, res, 201));
-  },
-
-  deactivate: function(req, res) {
-    Buyer.update(req.currentUser.buyer, { active: false }, Responder.dispatch(req, res, 201));
-  }
+  show: show,
+  modify: modify,
+  deactivate: deactivate
 };
+
+function index(req, res) {
+  Buyer.find().exec(function(err, buyers) {
+    if(err){ res.send(500) }
+    res.json(200, buyers);
+  });
+}
 
 function create(req, res) {
   var p = req.params.all();
@@ -53,4 +48,16 @@ function create(req, res) {
       cb(err, user);
     });
   }
+}
+
+function show(req, res) {
+  Buyer.findOne(req.currentUser.buyer, Responder.dispatch(req, res));
+}
+
+function modify(req, res) {
+  Buyer.update(req.currentUser.buyer, p, Responder.dispatch(req, res, 201));
+}
+
+function deactivate(req, res) {
+  Buyer.update(req.currentUser.buyer, { active: false }, Responder.dispatch(req, res, 201));
 }
