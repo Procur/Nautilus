@@ -11,7 +11,7 @@ module.exports.routes = {
   'put /users'      : 'UserController.modify',
   'delete /users'   : 'UserController.deactivate',
 
-  'get /companies'  : 'CompanyController.index',
+  'get /companies'  : 'CompanyController.show',
   'post /companies' : 'CompanyController.create',
   'put /companies'  : 'CompanyController.modify'
 

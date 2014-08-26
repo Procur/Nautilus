@@ -41,26 +41,20 @@ function create(req, res) {
 }
 
 ////////////////////////////////////////
-
+/*
 function index(req, res) {
-  var user = req.currentUser;
-  Company.find(user.company).exec(Responder.dispatch(req, res, 201));
 
+   var user = req.currentUser;
+  
+   Company.find().exec(Responder.dispatch(req, res, 201));
 }
-
+*/
 ////////////////////////////////////////
 
 function show(req, res) {
-  var p = req.params.all();
-  Company.findOne()
-      .where({ id: p.id })
-      .then(function(company){
-        errorHandler.nullCollection(company, res);
-        res.status(200);
-        res.json(company);
-      }).fail(function(err){
-        errorHandler.serverError(err, res);
-      });
+  var user = req.currentUser;
+  
+  Company.findOne(user.company).exec(Responder.dispatch(req, res, 201));
 }
 
 ////////////////////////////////////////
@@ -75,25 +69,5 @@ function modify(req, res) {
 ////////////////////////////////////////
 
 function deactivate(req, res) {
-
-  var p = req.params.all();
-
-  async.waterfall([ fetchCompany, deactivateCompany], sendResponse);
-
-  function fetchCompany(callback) {
-    Company.findOne({ id: p.id }, function(err, company){
-      callback(err, company);
-    });
-  }
-
-  function deactivateCompany(company, callback) {
-    Company.update(company, { active: false, visible: false }, function(err, company) {
-      callback(err, company);
-    });
-  }
-
-  function sendResponse(err, company) {
-    errorHandler.qc(err, res, company);
-    res.json(200, company);
-  }
+  
 }
