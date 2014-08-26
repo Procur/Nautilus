@@ -108,11 +108,19 @@ function attributes() {
 }
 
 function beforeValidate(values, cb) {
-  if (values.phone || values.fax){
- //  console.log(values.phone);
- //  console.log(values.fax);
-  } 
-  cb();
-}   
+  var phones = [ values.phone, values.fax ],
+      err;
 
+  phones = _.map(phones, function(phone) {
+    if (!phone) { return undefined; }
+    phone = _.pick(JSON.parse(phone), ['countryCode', 'number', 'extension']);
+    if (!ValidationService.isValidPhoneObject(phone)) { err = 'invalidPhoneOrFax'; }
 
+    return phone;
+  });
+
+  // `undefined` is necessary to protect against null
+  values.phone = phones[0] || undefined;
+  values.fax = phones[1] || undefined;
+  cb(err);
+}

@@ -35,6 +35,7 @@ module.exports = function badRequest(data, options) {
   if (options === 'badLogin') { response.message = 'Invalid password.'; }
   if (options === 'emailExists') { response.message = 'You are already a member. Please sign up at /login.'; }
   if (options === 'invalidApiToken') { response.message = 'Your API token is invalid.'; }
+  if (options === 'invalidPhoneOrFax') { response.message = 'Validation Error: Check your phone or fax number.'; }
   if (options === 'badRequest') { response.message = 'No known user\'s email address is associated with this request.'; }
 
   res.status(400);
