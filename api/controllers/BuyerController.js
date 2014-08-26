@@ -7,9 +7,7 @@
 
 module.exports = {
 
-  create: function(req, res) {
-
-  },
+  create: create,
 
   index: function(req, res) {
 
@@ -28,3 +26,31 @@ module.exports = {
   }
 };
 
+function create(req, res) {
+  var p = req.params.all();
+
+  async.waterfall([ rejectIfAlreadyBuyer, createBuyer ], Responder.dispatch(req, res, 201));
+
+  function rejectIfAlreadyBuyer(cb) {
+    Buyer.findOne({ id: req.currentUser.buyer }, function(err, buyer) {
+      if(buyer === undefined){
+        cb(err, buyer);
+      }
+      else {
+        res.send(400, 'User is already associated with a buyer');
+      }
+    });
+  }
+
+  function createBuyer(buyer, cb) {
+    Buyer.create(p, function(err, buyer) {
+      callback(err, buyer);
+    });
+  }
+
+  function updateUser(buyer, cb) {
+    User.update(req.currentUser.id, { buyer: buyer.id }, function(err, user) {
+      cb(err, user);
+    });
+  }
+}
