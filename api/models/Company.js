@@ -98,19 +98,26 @@ function attributes() {
   };
 }
 
-function beforeValidate(values, cb) {
-  var phones = [ values.phone, values.fax ],
-      err;
-  phones = _.map(phones, function(phone) {
-    if (!phone) { return undefined; }
-    phone = _.pick(phone, ['countryCode', 'number', 'extension']);
-    if (!ValidationService.isValidPhoneObject(phone)) { err = 'invalidPhoneOrFax'; }
+function beforeValidate(values, callback) {
 
-    return phone;
-  });
+  async.parallel([ validatePhones ], callback);
 
-  // `undefined` is necessary to protect against null
-  values.phone = phones[0] || undefined;
-  values.fax = phones[1] || undefined;
-  cb(err);
+  function validatePhones(cb) {
+    var phones = [ values.phone, values.fax ],
+        err;
+
+    phones = _.map(phones, function(phone) {
+      if (!phone) { return undefined; }
+      phone = _.pick(phone, ['countryCode', 'number', 'extension']);
+      if (!ValidationService.isValidPhoneObject(phone)) { err = 'invalidPhoneOrFax'; }
+
+      // `undefined` is necessary to protect against null
+      return phone || undefined;
+    });
+
+    if (values.phone) { values.phone = phones[0]; }
+    if (values.fax) { values.fax = phones[1]; }
+
+    cb(err);
+  }
 }
