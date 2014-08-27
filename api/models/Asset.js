@@ -9,45 +9,28 @@ module.exports = {
 
   adapter: 'api',
   schema: true,
-  attributes: {
-    company: {
-      model: 'company'
-    },
+  attributes: attributes(),
 
-    buyer: {
-      model: 'buyer'
-    },
+  // Custom class methods
+  upload: upload
 
-    supplier: {
-      model: 'supplier'
-    },
-
-    user: {
-      model: 'user'
-    },
-
-    title: {
-      type: 'string'
-    },
-
-    type: {
-      type: 'string',
-      required: true
-    },
-
-    url: {
-      type: 'string',
-      required: 'true'
-    },
-
-    active: {
-      type: 'boolean',
-      required: true
-    },
-
-    visible: {
-      type: 'boolean',
-      required: true
-    }
-  }
 };
+
+function attributes() {
+  return {
+    type: { type: 'string', required: true },
+    url: { type: 'string', required: true },
+    visible: { type: 'boolean', required: true },
+    title: { type: 'string' },
+    deletedAt: { type: 'datetime' },
+
+    // ownership associations (hasOnlyOneOf)
+    company: { model: 'company' },
+    buyer: { model: 'buyer' },
+    supplier: { model: 'supplier' },
+    user: { model: 'user' }
+  };
+}
+
+function upload() {
+}

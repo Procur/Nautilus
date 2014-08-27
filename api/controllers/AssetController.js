@@ -6,16 +6,11 @@
  */
 
 module.exports = {
-  index: index,
   create: create,
   show: show,
   modify: modify,
   deactivate: deactivate
 };
-
-function index(req, res) {
-  Asset.find().exec(Responder.dispatch(req, res));
-}
 
 function create(req, res) {
   Asset.create(req.params.all()).exec(Responder.dispatch(req, res, 201));
