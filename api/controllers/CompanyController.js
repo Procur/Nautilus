@@ -69,5 +69,7 @@ function modify(req, res) {
 ////////////////////////////////////////
 
 function deactivate(req, res) {
-  
+  var user = req.currentUser;
+
+  Company.deactivate(user.company).exec(Responder.dispatch(req, res, 201));
 }

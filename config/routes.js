@@ -13,6 +13,7 @@ module.exports.routes = {
 
   'get /companies'  : 'CompanyController.show',
   'post /companies' : 'CompanyController.create',
-  'put /companies'  : 'CompanyController.modify'
+  'put /companies'  : 'CompanyController.modify',
+  'delete /companies' : 'CompanyController.deactivate'
 
 };
