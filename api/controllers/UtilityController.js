@@ -6,10 +6,22 @@
  */
 
 module.exports = {
-
-  heartbeat: function(req, res) {
-    var payload = "Procur API v1: Documentation: [doc address]";
-    res.send(200, payload);
-  }
+  heartbeat : heartbeat,
+  docs      : docs
 };
 
+function heartbeat (req, res) {
+  var payload = { 
+    application: 'Procur API v1',
+    version: 'v1 (alpha)',
+    documentation: 'http://api.procur.com/docs'
+  };
+
+  return res.ok(payload);
+}
+
+function docs (req, res) {
+  var url = 'https://www.procur.com/';
+  if (req.wantsJSON) { return res.json({ docs: url }); }
+  return res.redirect(url);
+}

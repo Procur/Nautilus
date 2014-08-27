@@ -18,7 +18,8 @@ module.exports = {
     token: {
       type: 'string',
       unique: true,
-      required: true
+      required: true,
+      primaryKey: true
     }
   }
 };
