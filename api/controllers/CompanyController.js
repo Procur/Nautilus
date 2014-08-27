@@ -9,7 +9,7 @@ var mongo = require('sails-mongo');
 module.exports = {
 
   create: create,
-  index: index,
+  //index: index,
   show: show,
   modify: modify,
   deactivate: deactivate
