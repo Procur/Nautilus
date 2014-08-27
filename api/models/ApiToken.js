@@ -10,17 +10,11 @@ module.exports = {
   adapter: 'api',
   schema: true,
   autoPK: false,
-  attributes: {
-    user: {
-      model: 'user'
-    },
-
-    token: {
-      type: 'string',
-      unique: true,
-      required: true,
-      primaryKey: true
-    }
-  }
 };
 
+function attributes() {
+  return {
+    user: { model: 'user' },
+    token: { type: 'string', unique: true, required: true, primaryKey: true }
+  };
+}
