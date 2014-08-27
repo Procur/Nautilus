@@ -1,7 +1,7 @@
 {
   "name": "nautilus",
   "private": true,
-  "version": "1.a",
+  "version": "0.9",
   "description": "Procur.com API Layer",
   "keywords": [],
   "dependencies": {
