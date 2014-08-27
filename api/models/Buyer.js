@@ -161,13 +161,8 @@ module.exports = {
       collection: 'productCategory',
       via:'buyer',
       dominant: true
-    },
-
-    active: {
-      type: 'boolean'
     }
-
-    /*rfx: {
+        /*rfx: {
       model: 'rfx'
     }*/
   }

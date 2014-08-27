@@ -12,9 +12,18 @@
 module.exports.models = {
 
   migrate: 'safe',
-  deactivate: deactivate
+  deactivate: deactivate,
+  attributes: attributes()
 
 };
+
+function attributes() {
+  return {
+    deletedAt: {
+      type: 'datetime'
+    }
+  };  
+}
 
 function deactivate (objectId) {
   var now = new Date();

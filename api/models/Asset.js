@@ -40,11 +40,6 @@ module.exports = {
       required: 'true'
     },
 
-    active: {
-      type: 'boolean',
-      required: true
-    },
-
     visible: {
       type: 'boolean',
       required: true

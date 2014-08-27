@@ -58,10 +58,6 @@ function attributes() {
       defaultsTo: 'pending'
     },
 
-    deletedAt: {
-      type: 'datetime'
-    },
-
     image: {
       type: 'string'
     },

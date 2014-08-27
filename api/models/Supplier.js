@@ -151,10 +151,6 @@ module.exports = {
       via: 'supplier'
     },
 
-    active: {
-      type: 'boolean'
-    },
-
     productCategory: {
       collection: 'productCategory',
       via:'supplier',
