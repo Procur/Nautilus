@@ -1,8 +1,8 @@
 {
   "name": "nautilus",
   "private": true,
-  "version": "0.0.0",
-  "description": "a Sails application",
+  "version": "1.a",
+  "description": "Procur.com API Layer",
   "keywords": [],
   "dependencies": {
     "async": "^0.9.0",
@@ -34,9 +34,18 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/strangelove/nautilus.git"
+    "url": "git://github.com/procur/nautilus.git"
   },
-  "author": "strangelove",
+  "author": {
+    "name": "Procur Developers",
+    "email": "dev@procur.com"
+  },
+  "contributors": [
+    { "name": "Will Ricketts", "email": "wricketts@procur.com" },
+    { "name": "Kyle Cline", "email": "kcline@procur.com" },
+    { "name": "Taylor Moss", "email": "tmoss@procur.com" },
+    { "name": "Nichlos Incardone", "email": "nincardone@procur.com" }
+  ],
   "license": "",
   "devDependencies": {
     "assert": "^1.1.1",
