@@ -24,4 +24,3 @@ module.exports = function unauthorized (data, err) {
   res.json(response);
 
 };
-
