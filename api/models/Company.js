@@ -12,8 +12,7 @@ module.exports = {
   attributes: attributes(),
 
   // Lifecycle callbacks
-  beforeValidate: beforeValidate
-  
+  beforeValidate: beforeValidate,
 };
 
 function attributes() {
@@ -25,11 +24,8 @@ function attributes() {
     },
 
     phone: {
-      type: 'json'
-    },
-
-    fax: {
-      type: 'json'
+      type: 'json',
+      required: true
     },
 
     email: {
@@ -38,9 +34,40 @@ function attributes() {
       unique: true
     },
 
-    website: {
+    companyType: {
       type: 'string',
       required: true
+    },
+
+    primaryLanguage: {
+      type: 'string',
+      required: true
+    },
+
+    country: {
+      type: 'string',
+      required: true
+    },
+
+    handle: {
+      type: 'string',
+      defaultsTo: 'temp_' + Date.now(),
+      unique: true,
+      required: true
+    },
+
+    wizardComplete: {
+      type: 'boolean',
+      defaultsTo: false,
+      required: true
+    },
+
+    fax: {
+      type: 'json'
+    },
+
+    website: {
+      type: 'string'
     },
 
     industry: {
@@ -48,26 +75,20 @@ function attributes() {
     },
 
     employeeCount: {
-      type: 'integer',
-      required: true
+      type: 'integer'
     },
 
     primaryMode: {
       type: 'string',
-      required: true
     },
 
-    wizardComplete: {
-      type: 'boolean',
-      required: true
+    dbaName: {
+      type: 'string'
     },
-
-    handle: {
-      type: 'string',
-      required: true,
-      unique: true
-    },
-
+    
+    productCategories: {
+      type: 'array'
+    }
     //ASSOCIATIONS HERE//
     users: {
       collection: 'user',
@@ -99,8 +120,7 @@ function attributes() {
 }
 
 function beforeValidate(values, callback) {
-
-  async.parallel([ validatePhones ], callback);
+  async.parallel([ validatePhones ], cb);
 
   function validatePhones(cb) {
     var phones = [ values.phone, values.fax ],
@@ -118,6 +138,12 @@ function beforeValidate(values, callback) {
     if (values.phone) { values.phone = phones[0]; }
     if (values.fax) { values.fax = phones[1]; }
 
-    cb(err);
+    cb(err, values);
   }
+
+  function cb(err, results) {
+    callback(err);
+  }
+
 }
+
