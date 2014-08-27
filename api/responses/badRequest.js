@@ -32,7 +32,7 @@ module.exports = function badRequest(data, options) {
     message: 'Your request is invalid.'
   };
 
-  if (options === 'badLogin') { response.message = 'Invalid password.'; }
+  if (options === 'badLogin') { response.message = 'Invalid username or password.'; }
   if (options === 'emailExists') { response.message = 'You are already a member. Please login.'; }
   if (options === 'invalidApiToken') { response.message = 'Your API token is invalid.'; }
   if (options === 'invalidPhoneOrFax') { response.message = 'Validation Error: Check your phone or fax number.'; }
