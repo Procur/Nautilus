@@ -88,7 +88,7 @@ function attributes() {
     
     productCategories: {
       type: 'array'
-    }
+    },
     //ASSOCIATIONS HERE//
     users: {
       collection: 'user',
