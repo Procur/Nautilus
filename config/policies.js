@@ -12,8 +12,8 @@
 
 module.exports.policies = {
 
-  '*': 'apiTokenAuthentication',
-  UtilityController: { 
+  '*': [ 'apiTokenAuthentication', 'adminReqCleaner' ],
+  UtilityController: {
     '*': true
   },
 

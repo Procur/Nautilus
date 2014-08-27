@@ -12,6 +12,7 @@ module.exports = {
   show: show,
   modify: modify,
   deactivate: deactivate
+  
 };
 
 function index(req, res) {
