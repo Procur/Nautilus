@@ -11,7 +11,8 @@ function badApiToken(req, callback) {
     host: req.host,
     params: req.params.all(),
     headers: req.headers,
-    path: req.path
+    path: req.path,
+    apitoken: req.headers.apitoken
   };
 
   Log.create(payload, function(err, log) {
