@@ -15,7 +15,22 @@ module.exports = {
 };
 
 function create(req, res) {
-  Location.create(req.params.all()).exec(Responder.dispatch(req, res, 201));
+  var
+    user = req.currentUser;
+    model = req.params.model;  
+    location = req.params.location;
+
+  async.waterfall([findModel, addLocation], Responder.dispatch(req, res, 201));
+  
+  function findModel(cb) {
+    sails.models[model].findOne(user[model]).exec(function(err, model) { cb(err, model); });
+  }
+
+  function addLocation(model, cb) {
+    console.log(model);
+    model.locations.add(location);
+    model.save(function(err) { cb(err, location); });
+  }
 }
 
 function show(req, res) {

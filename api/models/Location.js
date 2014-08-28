@@ -28,14 +28,8 @@ module.exports = {
     },
 
     address: {
-      line1: {
-        type: 'string',
-        required: true
-      },
-
-      line2: {
-        type: 'string'
-      }
+      type: 'json',
+      required: true
     },
 
     city: {
