@@ -20,7 +20,16 @@ module.exports = function unauthorized (data, err) {
       'header as `apitoken`.'
   };
 
-  res.status(401);
-  res.json(response);
+  var payload = {
+    ip: req.ip,
+    host: req.host,
+    params: req.params.all(),
+    headers: req.headers,
+    path: req.path
+  };
 
+  Log.create(payload, function(err, log) {
+    res.status(401);
+    res.json(response);
+  });
 };
