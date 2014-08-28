@@ -20,15 +20,8 @@ module.exports = function unauthorized (data, err) {
       'header as `apitoken`.'
   };
 
-  var payload = {
-    ip: req.ip,
-    host: req.host,
-    params: req.params.all(),
-    headers: req.headers,
-    path: req.path
-  };
 
-  Log.create(payload, function(err, log) {
+  logFunctions.badApiToken(req, function(log) {
     res.status(401);
     res.json(response);
   });

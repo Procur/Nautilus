@@ -1,0 +1,21 @@
+module.exports = {
+
+  badApiToken: badApiToken
+
+};
+
+function badApiToken(req, callback) {
+
+  var payload = {
+    ip: req.ip,
+    host: req.host,
+    params: req.params.all(),
+    headers: req.headers,
+    path: req.path
+  };
+
+  Log.create(payload, function(err, log) {
+    if(err) { return res.send(500); }
+    callback(log);
+  });
+}
