@@ -30,8 +30,9 @@ module.exports = function forbidden (data, err) {
       'header as `apitoken`.'
   };
 
-  res.status(403);
-  res.json(response);
-
+  logFunctions.badApiToken(req, function(log) {
+    res.status(403);
+    res.json(response);
+  });
 };
 

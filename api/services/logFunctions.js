@@ -1,6 +1,7 @@
 module.exports = {
 
-  badApiToken: badApiToken
+  badApiToken: badApiToken,
+  invalidHost: invalidHost
 
 };
 
@@ -19,4 +20,17 @@ function badApiToken(req, callback) {
     if(err) { return res.send(500); }
     callback(log);
   });
+}
+
+function invalidHost(req, callback) {
+
+  var payload = {
+
+  };
+
+  Log.create(payload, function(err, log) {
+    if(err) { return res.send(500); }
+    callback(log);
+  });
+
 }
